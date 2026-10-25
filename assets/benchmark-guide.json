@@ -1,0 +1,213 @@
+{
+  "schema_version": 1,
+  "project": "SurgStream-Bench",
+  "description": "A guide to the 14 tasks, five temporal modes and five clinical scenarios in the benchmark.",
+  "example_note": "Task examples are label-derived reference targets from CholecT50 VID06, not additional model predictions. Choice letters are omitted and categorical names are spaced for readability. Structured examples retain the canonical vocabulary. Recorded model examples appear in the separate demonstration section.",
+  "protocol": {
+    "input": "A causal surgical video stream sampled at one frame per second. At each step, only frames and dialogue already available may be used; persistent memory can retain earlier observations.",
+    "construction": "Cholec80 supplies phase and tool labels; CholecT50 supplies instrument-action-target annotations and complementary tool visibility. Shared recordings are grouped by procedure and loaded once with their labels combined.",
+    "split": "The manuscript reports 53 training, 11 validation and 21 test procedures. A shared recording stays in one split, preventing the same procedure from appearing in both training and test through different dataset names.",
+    "time": "a is the earliest valid response time, d is the deadline, and r is the emitted response time. These refer to the source video timeline. Future labels define evaluation targets during construction; future frames are not model inputs.",
+    "direct": "Direct questions target the query instant; evaluation accepts a reply from the query time through three seconds later. This applies to RT, BM and the end-of-surgery operative note.",
+    "categorical": "The formal benchmark uses multiple-choice questions for T1, T6, T10 and T11. This guide and the promotional film show the answer content without option letters.",
+    "averaging": "Each task is scored first. A mode or scenario score averages its member tasks; Avg_M averages the five modes and Avg_S averages the five scenarios. The two views group the same tasks by different criteria."
+  },
+  "scenarios": [
+    {"id": "S1", "name": "Workflow", "description": "Identify, time and anticipate surgical phases.", "task_ids": ["T1", "T2", "T3", "T4", "T5"]},
+    {"id": "S2", "name": "Instrument & action", "description": "Recognize tools and interactions, recall first appearances and count events.", "task_ids": ["T6", "T7", "T8", "T9"]},
+    {"id": "S3", "name": "Anatomy", "description": "Identify the current target and recover the order of handled structures.", "task_ids": ["T10", "T11"]},
+    {"id": "S4", "name": "Documentation", "description": "Organize procedural progress and the completed operation into structured records.", "task_ids": ["T12", "T13"]},
+    {"id": "S5", "name": "Narration", "description": "Maintain timely event observations and phase summaries as surgery unfolds.", "task_ids": ["T14"]}
+  ],
+  "modes": [
+    {
+      "id": "RT", "name": "Real-time perception", "question": "What is happening now?",
+      "description": "Answer an explicit question about the current surgical scene. The relevant evidence is available when the question arrives.",
+      "trigger": "A question about the current frame or recent scene.",
+      "evidence": "Current phase, visible instruments, action triplets or the anatomical target.",
+      "timing": "Reply at the query; a three-second emission allowance is used in evaluation.",
+      "output": "A categorical scene description.", "metric": "Accuracy", "color": "#2B7FB0", "task_ids": ["T1", "T6", "T10"]
+    },
+    {
+      "id": "BM", "name": "Backward memory", "question": "What happened earlier?",
+      "description": "Answer a present question using the accumulated procedure history. Duration, first-appearance, count and order questions deliberately require evidence older than the recent visual window; progress summaries can also include recently confirmed events.",
+      "trigger": "A retrospective question during surgery.",
+      "evidence": "Earlier phase intervals and instrument-action-target events retained in memory.",
+      "timing": "Reply when asked, rather than when the historical event originally occurred.",
+      "output": "A duration, timestamp, count, ordered structure or structured progress summary.", "metric": "Task-specific accuracy / structured F1", "color": "#7030A0", "task_ids": ["T4", "T7", "T8", "T11", "T12"]
+    },
+    {
+      "id": "FP", "name": "Forward proactive QA", "question": "Tell me when it happens.",
+      "description": "Keep an explicit request pending while watching the stream, then answer once its specified future event begins. The question arrives before the evidence.",
+      "trigger": "An earlier request to watch for a named phase or action.",
+      "evidence": "The requested event must become visible later in the stream.",
+      "timing": "The first reply attributed to the pending request must fall within [a, d], normally event onset through ten seconds later.",
+      "output": "A notification that the requested event has begun.", "metric": "Timing accuracy (T-Acc)", "color": "#C55A11", "task_ids": ["T5", "T9"]
+    },
+    {
+      "id": "PA", "name": "Proactive alert", "question": "Speak when the workflow calls for it.",
+      "description": "Issue an alert without an explicit user question. A transition alert follows the new phase onset; a preparation reminder is due before it.",
+      "trigger": "The surgical workflow itself; no user prompt.",
+      "evidence": "An annotated phase boundary and the task's response window.",
+      "timing": "Transition: [b, b + 10 s]. Preparation: [b - 60 s, b], clipped to the recording.",
+      "output": "An unsolicited phase transition or instrument preparation reminder.", "metric": "Timing F1 (T-F1)", "color": "#BF9000", "task_ids": ["T2", "T3"]
+    },
+    {
+      "id": "CM", "name": "Caption memory", "question": "Build a record of the procedure.",
+      "description": "Evaluate structured surgical documentation. The end-of-surgery note is requested once; streaming narration continuously produces its own Observe and Summary records without a question.",
+      "trigger": "An end-of-surgery note request (T13), or continuous record writing (T14).",
+      "evidence": "Phase intervals and timestamped instrument or instrument-action-target events.",
+      "timing": "T13 replies after the final query. T14 observations follow events causally, and phase summaries are due within ten seconds after phase completion.",
+      "output": "Structured event and phase records.", "metric": "Structured F1 (S-F1)", "color": "#548235", "task_ids": ["T13", "T14"]
+    }
+  ],
+  "tasks": [
+    {
+      "id": "T1", "title": "Current phase recognition", "mode": "RT", "scenario": "S1",
+      "purpose": "Identify which stage of the surgical workflow is being performed now.",
+      "evidence": "The current scene and its annotated phase.",
+      "answer_format": "A canonical phase category; evaluated as a categorical choice.",
+      "timing": "Target the query instant; evaluation accepts the reply within three seconds.",
+      "scoring": "Accuracy: the selected phase must match the reference phase.",
+      "example_prompt": "Which surgical phase is being performed now?", "reference_answer": "Calot triangle dissection.",
+      "example_context": "VID06, question at 00:57.", "reference_line": 6
+    },
+    {
+      "id": "T2", "title": "Phase-transition alert", "mode": "PA", "scenario": "S1",
+      "purpose": "Announce entry into a new phase without waiting for a question.",
+      "evidence": "The annotated onset b of the next surgical phase.",
+      "answer_format": "A transition alert naming the new phase.",
+      "timing": "The valid window is [b, b + 10 s], capped by the last video second.",
+      "scoring": "T-F1: alerts and reference events are matched one-to-one. A hit requires the transition type, correct phase content and a time inside the valid window. Unmatched alerts and missed events affect precision and recall.",
+      "example_prompt": "No user question: an automatic phase alert.", "reference_answer": "Phase transition: entering Calot triangle dissection.",
+      "example_context": "VID06, phase onset 00:55; valid alert 00:55-01:05.", "reference_line": 5
+    },
+    {
+      "id": "T3", "title": "Instrument preparation reminder", "mode": "PA", "scenario": "S1",
+      "purpose": "Remind the team about preparation for an upcoming phase before that phase begins.",
+      "evidence": "Annotated phase onsets define the target window. Preparation text comes from a fixed phase-to-instrument lookup, such as hook for Calot triangle dissection.",
+      "answer_format": "The upcoming phase and its associated preparation reminder.",
+      "timing": "The valid window is [max(0, b - 60 s), b]. The phase onset is the deadline.",
+      "scoring": "T-F1 with one-to-one matching, an in-window reminder and the required phase/reminder-type content. This task uses the benchmark's fixed preparation rules.",
+      "example_prompt": "No user question: preparation is triggered by the workflow.", "reference_answer": "Calot triangle dissection is coming next; prepare the hook.",
+      "example_context": "VID06, next phase begins at 00:55; valid reminder 00:00-00:55.", "reference_line": 2
+    },
+    {
+      "id": "T4", "title": "Completed-phase duration", "mode": "BM", "scenario": "S1",
+      "purpose": "Recall how long an earlier, completed phase lasted.",
+      "evidence": "A completed phase interval. The query is delayed until the confirming evidence has left the configured recent visual window.",
+      "answer_format": "A numeric duration in seconds.",
+      "timing": "Answer the retrospective question within three seconds.",
+      "scoring": "Duration accuracy with a 20% relative-error tolerance.",
+      "example_prompt": "How long did the Preparation phase last?", "reference_answer": "55 seconds.",
+      "example_context": "VID06, Preparation spans 00:00-00:55; question at 01:42.", "reference_line": 10
+    },
+    {
+      "id": "T5", "title": "Requested phase-start notification", "mode": "FP", "scenario": "S1",
+      "purpose": "Remember a request to announce the start of a specified future phase.",
+      "evidence": "A named phase begins after the query. Generated queries normally precede the event by 10-120 seconds.",
+      "answer_format": "A start notification containing the requested phase.",
+      "timing": "Wait for phase onset b, then reply inside [b, b + 10 s], capped by video length.",
+      "scoring": "T-Acc: the first reply attributed to this pending request must have the required start/phase content and fall inside the window. A premature or late reply does not become correct by repeating it later.",
+      "example_prompt": "Tell me when the GallbladderDissection phase starts.", "reference_answer": "The gallbladder dissection phase has started.",
+      "example_context": "VID06, query 21:32; phase starts 23:26; valid reply 23:26-23:36.", "reference_line": 97
+    },
+    {
+      "id": "T6", "title": "Instrument and interaction recognition", "mode": "RT", "scenario": "S2",
+      "purpose": "Identify visible instruments or their current instrument-action-target interactions.",
+      "evidence": "Current tool visibility and, when available, triplet annotations. Instrument-only and triplet questions are two variants of this one task.",
+      "answer_format": "A categorical instrument set or a set of instrument-action-target triplets.",
+      "timing": "Target the current scene and reply within three seconds of the question.",
+      "scoring": "Accuracy of the categorical choice representing the current set.",
+      "example_prompt": "Which instrument-action-target triplets are visible now?", "reference_answer": "grasper | retract | gallbladder",
+      "example_context": "VID06, question at 02:17. An instrument-only variant at 01:07 has the reference content 'grasper, hook'.", "reference_line": 13
+    },
+    {
+      "id": "T7", "title": "First instrument appearance", "mode": "BM", "scenario": "S2",
+      "purpose": "Recover when a named instrument first became visible earlier in the procedure.",
+      "evidence": "The first stable tool appearance. Independent visibility labels are used where available, including visible tools without an active triplet.",
+      "answer_format": "A source-video timestamp in mm:ss.",
+      "timing": "The first appearance has left the recent visual window before the question; reply within three seconds of the query.",
+      "scoring": "Timestamp recall with an absolute tolerance of ten seconds.",
+      "example_prompt": "When did the grasper first appear?", "reference_answer": "00:15",
+      "example_context": "VID06, first appearance at 00:15; question at 02:24.", "reference_line": 14
+    },
+    {
+      "id": "T8", "title": "Clipping event count", "mode": "BM", "scenario": "S2",
+      "purpose": "Accumulate how many annotated clipping events have occurred so far.",
+      "evidence": "Past clipping onsets, using action labels or the available clipper tool-onset annotations. The construction delays the question so the relevant counting evidence is outside the recent visual window.",
+      "answer_format": "An integer event count.",
+      "timing": "Answer the count question within three seconds.",
+      "scoring": "Count accuracy with a tolerance of plus or minus one event.",
+      "example_prompt": "How many clipping actions have been done so far?", "reference_answer": "3",
+      "example_context": "VID06, question at 22:15; reference count three.", "reference_line": 101
+    },
+    {
+      "id": "T9", "title": "Requested action-start notification", "mode": "FP", "scenario": "S2",
+      "purpose": "Wait for a named instrument to begin a specified action, then notify the user.",
+      "evidence": "A future labeled triplet onset. The first onset of each instrument-verb pair is used so the requested event is unambiguous.",
+      "answer_format": "An action-start notification naming the instrument and verb; the reference text also names the target.",
+      "timing": "Queries normally arrive 10-120 seconds before the event. The valid reply window is [event onset, event onset + 10 s], capped by video length.",
+      "scoring": "T-Acc: the first attributed reply must contain the required start, instrument and action content and arrive inside the window.",
+      "example_prompt": "Tell me when the grasper starts to retract.", "reference_answer": "The grasper has started to retract the gallbladder.",
+      "example_context": "VID06, query 00:04; event 00:15; valid reply 00:15-00:25.", "reference_line": 3
+    },
+    {
+      "id": "T10", "title": "Current anatomical target", "mode": "RT", "scenario": "S3",
+      "purpose": "Identify which anatomical structure is currently being acted on.",
+      "evidence": "The target component of the current instrument-action-target annotations.",
+      "answer_format": "A categorical anatomical target or target set.",
+      "timing": "Reply within three seconds of the current-scene question.",
+      "scoring": "Accuracy of the selected anatomical target.",
+      "example_prompt": "Which anatomical structure is being acted on now?", "reference_answer": "Gallbladder.",
+      "example_context": "VID06, question at 01:37.", "reference_line": 9
+    },
+    {
+      "id": "T11", "title": "Anatomical handling order", "mode": "BM", "scenario": "S3",
+      "purpose": "Recall which of two structures was first handled or clipped.",
+      "evidence": "The first annotated handling or clipping onset for each structure. Onsets must be at least ten seconds apart; the relevant confirmations precede the recent visual window.",
+      "answer_format": "One of the two named anatomical structures.",
+      "timing": "Answer the retrospective order question within three seconds.",
+      "scoring": "Accuracy of the two-choice order decision.",
+      "example_prompt": "Which was clipped first: the cystic artery or the cystic duct?", "reference_answer": "Cystic duct.",
+      "example_context": "VID06, question at 23:35; first clipping onsets 20:36 for the duct and 21:19 for the artery.", "reference_line": 108
+    },
+    {
+      "id": "T12", "title": "Surgical progress summary", "mode": "BM", "scenario": "S4",
+      "purpose": "Summarize the completed workflow and confirmed events available at an intermediate point.",
+      "evidence": "All confirmed completed phases and first-occurrence events before the query. This task can include recently confirmed events as well as long-term history.",
+      "answer_format": "Structured phase intervals followed by timestamped first-occurrence events.",
+      "timing": "Reply within three seconds of the progress query; include only information confirmed by that point.",
+      "scoring": "S-F1 averages phase-interval and event F1. Canonical phase/event names must match; interval boundaries and event timestamps are matched within 30 seconds.",
+      "example_prompt": "What has been done so far in this surgery?", "reference_answer": "P1 Preparation 00:00-00:55\n[00:15] grasper | retract | gallbladder\n[00:58] hook | dissect | gallbladder",
+      "example_context": "VID06, question at 01:14; complete reference answer for this instance.", "reference_line": 8
+    },
+    {
+      "id": "T13", "title": "End-of-surgery operative note", "mode": "CM", "scenario": "S4",
+      "purpose": "Assemble the full operation into a structured record once the stream ends.",
+      "evidence": "All phase intervals and first-occurrence instrument or instrument-action-target events from the procedure.",
+      "answer_format": "A structured note using phase names, interval boundaries and timestamped events.",
+      "timing": "The query arrives on the final video second; evaluation accepts the reply within three seconds.",
+      "scoring": "S-F1 using the same phase/event matching rules as T12, with a 30-second tolerance for boundaries and event times.",
+      "example_prompt": "The surgery has ended. Write the operative note.", "reference_answer": "P1 Preparation 00:00-00:55\nP2 CalotTriangleDissection 00:55-20:28\nP3 ClippingCutting 20:28-23:26\n[00:15] grasper | retract | gallbladder\n[00:58] hook | dissect | gallbladder",
+      "example_context": "VID06, query at 35:53. Excerpt: the full reference contains seven phase intervals and 26 first-occurrence events.", "reference_line": 168
+    },
+    {
+      "id": "T14", "title": "Continuous streaming narration", "mode": "CM", "scenario": "S5",
+      "purpose": "Write timely observations and phase summaries throughout the stream without being asked.",
+      "evidence": "The event and phase timeline across the procedure. Evaluation reads the model's own Observe and Summary records; there is no separate question-answer target for this task.",
+      "answer_format": "Timestamped Observe event records (instruments or instrument-action-target triplets) and Summary phase intervals.",
+      "timing": "Observe records must be emitted causally within 30 seconds after the corresponding event; their reported timestamps must match within 30 seconds and cannot lie in the future. Phase summaries must follow completion and be emitted within ten seconds; reported interval boundaries must match within 30 seconds.",
+      "scoring": "S-F1 averages matched phase intervals and Observe events. Summary event counts are record content and are not a separately scored count-accuracy measure in this task.",
+      "example_prompt": "No user question: continuous record writing.", "reference_answer": "[00:15] grasper | retract | gallbladder\n[00:58] hook | dissect | gallbladder",
+      "example_context": "VID06, two label-derived event examples from the full-video narration target. These are event contents, not a claimed model transcript.", "reference_line": 1
+    }
+  ],
+  "provenance": {
+    "question_snapshot_sha256": "9989bb8029546f9c4841012c1e5ce4f98c334367090ae86d204daf698b25d214",
+    "task_generator_sha256": "814f139b1f1b73b2b685a471408a93e1495703c8611aed6762052ad213a777b3",
+    "scorer_sha256": "19b53d4ce1bd5155411c46a17b5b0f13e9d44f6e70151939edf45598e5953e92",
+    "scope": "T1-T14 and S1-S5 only; the five-scenario benchmark described in the manuscript.",
+    "split_counts_source": "Current research manuscript; no independent remote dataset recount is claimed."
+  }
+}

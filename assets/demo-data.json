@@ -1,0 +1,158 @@
+{
+  "schema_version": 1,
+  "project": "SurgStream",
+  "cases": [
+    {
+      "id": "rt",
+      "mode": "RT",
+      "title": "Read the current surgical phase.",
+      "task": "T1",
+      "vid": "t50_73",
+      "query": "Which surgical phase is being performed now?",
+      "answer": "A. CalotTriangleDissection",
+      "display_answer": "Calot triangle dissection.",
+      "query_time": 453,
+      "response_time": 453,
+      "start": 449,
+      "end": 457,
+      "clip": "assets/clip-rt.mp4",
+      "poster": "assets/poster-rt.jpg",
+      "source": "CholecT50 · VID73",
+      "caption": "Continuous source footage, 07:29–07:37.",
+      "records": [],
+      "original_question": "Which surgical phase is being performed now?\nOptions: A. CalotTriangleDissection  B. GallbladderDissection  C. Preparation  D. CleaningCoagulation\nAnswer with the option letter.",
+      "options": [
+        "CalotTriangleDissection",
+        "GallbladderDissection",
+        "Preparation",
+        "CleaningCoagulation"
+      ],
+      "ground_truth": "A. CalotTriangleDissection",
+      "raw_output": "</Response> A. CalotTriangleDissection",
+      "record_kind": "recorded_model_output"
+    },
+    {
+      "id": "bm",
+      "mode": "BM",
+      "title": "Recall an event from earlier in the procedure.",
+      "task": "T7",
+      "vid": "t50_73",
+      "query": "When did the hook first appear?",
+      "answer": "01:37",
+      "query_time": 374,
+      "response_time": 374,
+      "start": 369,
+      "end": 379,
+      "clip": "assets/clip-bm.mp4",
+      "poster": "assets/poster-bm.jpg",
+      "source": "CholecT50 · VID73",
+      "caption": "Continuous source footage, 06:09–06:19. The answer refers back to the hook first appearing at 01:37.",
+      "records": [
+        {
+          "time": 97,
+          "emitted_at": 99,
+          "type": "Observe",
+          "text": "hook | dissect | gallbladder"
+        }
+      ],
+      "original_question": "When did the hook first appear?",
+      "ground_truth": "01:37",
+      "raw_output": "</Response> 01:37",
+      "record_kind": "recorded_model_output"
+    },
+    {
+      "id": "fp",
+      "mode": "FP",
+      "title": "Wait for the relevant event, then respond.",
+      "task": "T9",
+      "vid": "t50_73",
+      "query": "Tell me when the hook starts to retract.",
+      "answer": "The hook has started to retract the gallbladder.",
+      "query_time": 780,
+      "response_time": 846,
+      "start": 779,
+      "end": 851,
+      "clip": "assets/clip-fp.mp4",
+      "poster": "assets/poster-fp.jpg",
+      "source": "CholecT50 · VID73",
+      "caption": "Continuous 72-second source excerpt. Query 13:00; recorded reply 14:06, within the annotated 14:00–14:10 response window. Other concurrent dialogue is omitted from this selected transcript.",
+      "records": [
+        {
+          "time": 839,
+          "emitted_at": 841,
+          "type": "Observe",
+          "text": "hook | retract | gallbladder"
+        }
+      ],
+      "original_question": "Tell me when the hook starts to retract.",
+      "evidence_time": 840,
+      "deadline": 850,
+      "ground_truth": "The hook has started to retract the gallbladder.",
+      "raw_output": "</Response> The hook has started to retract the gallbladder.",
+      "record_kind": "recorded_model_output"
+    },
+    {
+      "id": "pa",
+      "mode": "PA",
+      "title": "Recognize a phase transition as it happens.",
+      "task": "T2",
+      "vid": "t50_32",
+      "query": null,
+      "answer": "Phase transition: entering GallbladderRetraction.",
+      "query_time": null,
+      "response_time": 1874,
+      "start": 1870,
+      "end": 1880,
+      "clip": "assets/clip-pa.mp4",
+      "poster": "assets/poster-pa.jpg",
+      "source": "CholecT50 · VID32",
+      "caption": "Continuous source footage, 31:10–31:20. This autonomous phase alert is a PA example; it is not presented as a reply to a pending FP question.",
+      "records": [],
+      "evidence_time": 1874,
+      "deadline": 1884,
+      "ground_truth": "Phase transition: entering GallbladderRetraction.",
+      "raw_output": "</Response> Phase transition: entering GallbladderRetraction.",
+      "record_kind": "recorded_model_output"
+    },
+    {
+      "id": "cm",
+      "mode": "CM",
+      "title": "Fold completed events into a phase summary.",
+      "task": "T14",
+      "vid": "c80_77",
+      "query": null,
+      "answer": "[P3 ClippingCutting 14:17-16:52] clipper x2; grasper | retract | gallbladder x3; scissors x1",
+      "query_time": null,
+      "response_time": 1014,
+      "start": 1014,
+      "end": 1014,
+      "poster": "assets/poster-cm.jpg",
+      "source": "Cholec80 · video77",
+      "caption": "Single source frame at 16:54. This is a model-generated summary: its 14:17–16:52 interval approximates the annotated 14:29–16:48 phase. Event counts have not been independently verified.",
+      "records": [],
+      "ground_truth_phase": {
+        "name": "ClippingCutting",
+        "start": 869,
+        "end": 1008
+      },
+      "raw_output": "</Summary> [P3 ClippingCutting 14:17-16:52] clipper x2; grasper | retract | gallbladder x3; scissors x1",
+      "record_kind": "recorded_model_output"
+    }
+  ],
+  "sourceNote": "Selected recorded research outputs, not an accuracy estimate. Footage replays are edited for presentation; timestamps refer to the original recordings. The main film shortens one waiting interval. CM counts are model-generated.",
+  "provenance": {
+    "run": "q1_full",
+    "question_snapshot_sha256": "9989bb8029546f9c4841012c1e5ce4f98c334367090ae86d204daf698b25d214",
+    "adapter_sha256": "6eeab4fa2c72125475bf9a0a303e84763ec00dbd70a9538b0627a842acfcd283",
+    "datasets": [
+      {
+        "name": "Cholec80",
+        "url": "https://camma.unistra.fr/datasets/"
+      },
+      {
+        "name": "CholecT50",
+        "url": "https://github.com/CAMMA-public/cholect50"
+      }
+    ]
+  }
+}
