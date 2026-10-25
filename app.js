@@ -416,18 +416,28 @@
       const match = sectionLinks.find(item => item.section === section);
       match?.link.setAttribute('aria-current', 'location');
     };
-    if ('IntersectionObserver' in window) {
-      const visible = new Set();
-      const observer = new IntersectionObserver(entries => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) visible.add(entry.target);
-          else visible.delete(entry.target);
-        });
-        const candidates = [...visible].sort((a, b) => a.getBoundingClientRect().top - b.getBoundingClientRect().top);
-        setCurrentSection(candidates[0] || null);
-      }, { rootMargin: '-15% 0px -55% 0px', threshold: 0 });
-      sectionLinks.forEach(item => observer.observe(item.section));
-    }
+    const updateCurrentSection = () => {
+      const headerBottom = header?.getBoundingClientRect().bottom || 0;
+      const scrollPaddingTop = parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop) || 0;
+      const readingMarker = Math.max(headerBottom + 24, scrollPaddingTop + 1);
+      const current = sectionLinks.find(({ section }) => {
+        const { top, bottom } = section.getBoundingClientRect();
+        return top <= readingMarker && bottom > readingMarker;
+      });
+      setCurrentSection(current?.section || null);
+    };
+    let navUpdatePending = false;
+    const scheduleNavUpdate = () => {
+      if (navUpdatePending) return;
+      navUpdatePending = true;
+      requestAnimationFrame(() => {
+        navUpdatePending = false;
+        updateCurrentSection();
+      });
+    };
+    window.addEventListener('scroll', scheduleNavUpdate, { passive: true });
+    window.addEventListener('resize', scheduleNavUpdate, { passive: true });
+    updateCurrentSection();
   }
 
   const copyButton = document.getElementById('copy-citation');
