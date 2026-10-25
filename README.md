@@ -14,11 +14,15 @@ Open http://127.0.0.1:4173/ .
 
 ## Deployment
 
+The public website is [https://surgstream.github.io/](https://surgstream.github.io/). Its source repository is [surgstream/surgstream.github.io](https://github.com/surgstream/surgstream.github.io), under the [SurgStream organization](https://github.com/surgstream). GitHub Pages is configured to use GitHub Actions; pushes to `main` automatically deploy the site.
+
+To deploy another copy:
+
 1. Put the contents of this folder at the root of a GitHub repository on the `main` branch. Include the hidden `.github/` folder and `.nojekyll` file.
 2. In repository Settings → Pages, set Source to **GitHub Actions**.
 3. The included `pages.yml` workflow deploys on a push to `main`; it can also be run manually from Actions.
 
-The site works at both `https://USERNAME.github.io/` and `https://USERNAME.github.io/REPOSITORY/`. No domain or repository name is hardcoded. Once a public URL is chosen, add its absolute social-preview URL and a canonical URL to `index.html` if wanted.
+Internal navigation, media, styles and scripts use relative paths, so the files can run at either a root URL or a repository subpath. The canonical URLs in `index.html` and `benchmark.html`, and the social-preview URLs in `index.html`, point to the official `https://surgstream.github.io/` domain. Update those metadata URLs when hosting a separate copy.
 
 ## Content and provenance
 
