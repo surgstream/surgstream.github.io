@@ -594,7 +594,13 @@ p { color: var(--muted); }
   .method-grid { grid-template-columns: 1fr; gap: 55px; }
   .method-block > p { max-width: 850px; }
   .memory-visual, .timing-visual { max-width: 760px; }
-  .example-panel { grid-template-columns: 1fr; }
+  .mode-tabs { display: flex; gap: 8px; max-width: 100%; min-width: 0; border: 0; border-radius: 0; margin: 26px 0 16px; padding: 3px 3px 9px; overflow-x: auto; overflow-y: hidden; overscroll-behavior-x: contain; scroll-snap-type: x proximity; scroll-padding-inline: 3px; }
+  .mode-tabs button { flex: 0 0 260px; padding: 16px 18px 20px; border: 1px solid var(--line); border-radius: 6px; font-size: 16px; white-space: nowrap; scroll-snap-align: start; }
+  .mode-tabs button:last-child { border-right: 1px solid var(--line); }
+  .mode-tabs button small { white-space: nowrap; }
+  .mode-tabs button:after { height: 2px; bottom: -1px; border-radius: 3px; }
+  .mode-tabs button[aria-selected=true] { border-color: var(--brand); background: #fbf5f6; }
+  .example-panel { grid-template-columns: 1fr; border-radius: 8px; }
   .example-media video { aspect-ratio: 16/9; min-height: 0; max-height: 600px; }
   .example-still { max-height: 600px; }
   .example-dialogue { padding: 30px; }
@@ -737,12 +743,8 @@ p { color: var(--muted); }
   .timing-labels { margin-inline: 0; gap: 6px; }
   .timing-window { width: 82%; }
   .timing-window > span { max-width: 180px; padding-left: 23px; }
-  .mode-tabs { display: flex; gap: 8px; border: 0; border-radius: 0; margin: 26px 0 16px; overflow-x: auto; padding: 3px 3px 9px; scroll-snap-type: x mandatory; }
-  .mode-tabs button { flex: 0 0 155px; scroll-snap-align: start; }
   .mode-tabs button small { font-size: 14px; }
   .mode-tabs button { padding: 15px; border: 1px solid var(--line); border-radius: 6px; font-size: 16px; }
-  .mode-tabs button:after { height: 2px; bottom: -1px; border-radius: 3px; }
-  .mode-tabs button[aria-selected=true] { border-color: var(--brand); background: #fbf5f6; }
   .mode-tabs button > span { font-size: 23px; margin-bottom: 4px; }
   .example-panel { border-radius: 8px; }
   .replay-toolbar { padding: 12px 16px; }

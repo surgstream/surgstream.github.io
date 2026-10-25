@@ -13,12 +13,12 @@
       "display_answer": "Calot triangle dissection.",
       "query_time": 453,
       "response_time": 453,
-      "start": 449,
-      "end": 457,
+      "start": 452,
+      "end": 464,
       "clip": "assets/clip-rt.mp4",
       "poster": "assets/poster-rt.jpg",
       "source": "CholecT50 · VID73",
-      "caption": "Continuous source footage, 07:29–07:37.",
+      "caption": "Continuous source footage, 07:32–07:44.",
       "records": [],
       "original_question": "Which surgical phase is being performed now?\nOptions: A. CalotTriangleDissection  B. GallbladderDissection  C. Preparation  D. CleaningCoagulation\nAnswer with the option letter.",
       "options": [
@@ -37,27 +37,27 @@
       "title": "Recall an event from earlier in the procedure.",
       "task": "T7",
       "vid": "t50_73",
-      "query": "When did the hook first appear?",
-      "answer": "01:37",
-      "query_time": 374,
-      "response_time": 374,
-      "start": 369,
-      "end": 379,
+      "query": "When did the clipper first appear?",
+      "answer": "12:08",
+      "query_time": 970,
+      "response_time": 970,
+      "start": 965,
+      "end": 980,
       "clip": "assets/clip-bm.mp4",
       "poster": "assets/poster-bm.jpg",
       "source": "CholecT50 · VID73",
-      "caption": "Continuous source footage, 06:09–06:19. The answer refers back to the hook first appearing at 01:37.",
+      "caption": "Continuous source footage, 16:05–16:20. The question at 16:10 recalls the clipper first appearing at 12:08; that earlier memory record was written at 12:10.",
       "records": [
         {
-          "time": 97,
-          "emitted_at": 99,
+          "time": 728,
+          "emitted_at": 730,
           "type": "Observe",
-          "text": "hook | dissect | gallbladder"
+          "text": "clipper | clip | cystic_artery"
         }
       ],
-      "original_question": "When did the hook first appear?",
-      "ground_truth": "01:37",
-      "raw_output": "</Response> 01:37",
+      "original_question": "When did the clipper first appear?",
+      "ground_truth": "12:08",
+      "raw_output": "</Response> 12:08",
       "record_kind": "recorded_model_output"
     },
     {
@@ -124,11 +124,12 @@
       "answer": "[P3 ClippingCutting 14:17-16:52] clipper x2; grasper | retract | gallbladder x3; scissors x1",
       "query_time": null,
       "response_time": 1014,
-      "start": 1014,
-      "end": 1014,
+      "start": 1003,
+      "end": 1018,
+      "clip": "assets/clip-cm.mp4",
       "poster": "assets/poster-cm.jpg",
       "source": "Cholec80 · video77",
-      "caption": "Single source frame at 16:54. This is a model-generated summary: its 14:17–16:52 interval approximates the annotated 14:29–16:48 phase. Event counts have not been independently verified.",
+      "caption": "Continuous source footage, 16:43–16:58; memory write at 16:54. This is a model-generated summary: its 14:17–16:52 interval approximates the annotated 14:29–16:48 phase. Event counts have not been independently verified.",
       "records": [],
       "ground_truth_phase": {
         "name": "ClippingCutting",
@@ -139,7 +140,7 @@
       "record_kind": "recorded_model_output"
     }
   ],
-  "sourceNote": "Selected recorded research outputs, not an accuracy estimate. Footage replays are edited for presentation; timestamps refer to the original recordings. The main film shortens one waiting interval. CM counts are model-generated.",
+  "sourceNote": "Selected recorded research outputs, not an accuracy estimate. Each website video excerpt is continuous; timestamps refer to the original recordings. The main film shows the FP request as pending from an earlier time. CM summaries are model-generated; event counts have not been independently verified.",
   "provenance": {
     "run": "q1_full",
     "question_snapshot_sha256": "9989bb8029546f9c4841012c1e5ce4f98c334367090ae86d204daf698b25d214",

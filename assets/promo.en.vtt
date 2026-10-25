@@ -1,34 +1,100 @@
 WEBVTT
 
-00:00.500 --> 00:03.800
-SurgStream. Surgery unfolds. Understanding keeps up.
+1
+00:00:00.300 --> 00:00:04.800
+SurgStream: what to remember and when to respond.
 
-00:04.400 --> 00:07.700
-See the present. Real-time surgical perception.
+2
+00:00:05.100 --> 00:00:11.800
+Five temporal modes: RT, BM, FP, PA and CM.
 
-00:08.000 --> 00:08.650
-Which surgical phase is being performed now?
+3
+00:00:12.000 --> 00:00:14.900
+Real-time perception: answer the current scene.
 
-00:08.650 --> 00:11.800
-Calot triangle dissection.
+4
+00:00:16.000 --> 00:00:26.700
+Question: Which surgical phase is being performed now?
+Recorded response: Calot triangle dissection.
 
-00:12.400 --> 00:16.800
-Remember the procedure. A timestamped observation records the hook at 01:37.
+5
+00:00:27.000 --> 00:00:29.900
+Backward memory: recall an earlier event.
 
-00:17.000 --> 00:17.650
-When did the hook first appear?
+6
+00:00:30.000 --> 00:00:34.800
+Earlier Observe record [12:08]:
+clipper | clip | cystic_artery.
 
-00:17.650 --> 00:21.800
-01:37.
+7
+00:00:35.000 --> 00:00:40.000
+Question: When did the clipper first appear?
+Recorded response: 12:08.
 
-00:23.000 --> 00:27.800
-Tell me when the hook starts to retract. The waiting interval is shortened in this edited replay.
+8
+00:00:40.100 --> 00:00:44.800
+The earlier record remains available for the later question.
 
-00:28.000 --> 00:32.800
-The hook has started to retract the gallbladder. Source reply 14:06, 66 seconds after the query.
+9
+00:00:45.000 --> 00:00:47.700
+The last frame is held for reading.
 
-00:33.100 --> 00:35.800
-Real-time perception. Backward memory. Forward proactive QA. Proactive alert. Caption memory.
+10
+00:00:48.000 --> 00:00:50.900
+Forward proactive QA: wait for a requested event.
 
-00:36.300 --> 00:40.000
-SurgStream. Observe. Remember. Respond.
+11
+00:00:51.000 --> 00:00:56.200
+Pending question, asked earlier at 13:00:
+Tell me when the hook starts to retract.
+
+12
+00:00:56.300 --> 00:00:59.800
+This continuous excerpt starts at 13:51.
+The original request remains pending.
+
+13
+00:01:00.000 --> 00:01:05.800
+The annotated response window is 14:00–14:10.
+The source video continues at normal speed.
+
+14
+00:01:06.000 --> 00:01:10.800
+Recorded at 14:06:
+The hook has started to retract the gallbladder.
+
+15
+00:01:11.000 --> 00:01:13.900
+Proactive alert: a workflow alert without a question.
+
+16
+00:01:14.000 --> 00:01:17.800
+No user question. The source recording reaches a phase transition.
+
+17
+00:01:18.000 --> 00:01:25.700
+Recorded alert at 31:14:
+Phase transition: entering GallbladderRetraction.
+
+18
+00:01:26.000 --> 00:01:28.900
+Caption memory: fold observations into a phase summary.
+
+19
+00:01:29.000 --> 00:01:34.300
+Continuous source footage, 16:43–16:58.
+The annotated clipping-and-cutting phase ends at 16:48.
+
+20
+00:01:34.400 --> 00:01:39.800
+This is a model-generated Summary.
+Its event counts have not been independently verified.
+
+21
+00:01:40.000 --> 00:01:48.700
+Summary [P3 ClippingCutting 14:17–16:52]:
+clipper ×2; grasper | retract | gallbladder ×3; scissors ×1.
+
+22
+00:01:49.000 --> 00:01:53.800
+SurgStream: workflow-anchored memory and deadline-aware response timing.

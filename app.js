@@ -11,6 +11,12 @@
 
   const data = window.SURGSTREAM_DEMO || { cases: [] };
   const examples = Array.isArray(data.cases) ? data.cases : [];
+  const mediaVersions = new Map([
+    ['assets/clip-rt.mp4', '5952579a7428'],
+    ['assets/clip-bm.mp4', '0bc3e94c1af4'],
+    ['assets/poster-bm.jpg', 'aa5d72fc8430']
+  ]);
+  const mediaURL = path => mediaVersions.has(path) ? path + '?v=' + mediaVersions.get(path) : path;
   const tabs = [...document.querySelectorAll('[role="tab"][data-mode]')];
   const video = document.getElementById('example-video');
   const still = document.getElementById('example-still');
@@ -181,7 +187,10 @@
     if (!activeExample) return 'No recorded example is available.';
     const response = timeInSeconds(activeExample.response_time);
     if (!activeExample.clip) return 'Still frame · Model-generated memory write at ' + formatTime(response) + '.';
-    if (video?.ended || sourceTime >= excerptRange().end) return 'Recorded playback complete · Response at ' + formatTime(response) + '.';
+    if (video?.ended || sourceTime >= excerptRange().end) {
+      const label = activeMode === 'CM' ? 'Summary written' : activeMode === 'PA' ? 'Automatic alert' : 'Response';
+      return 'Recorded playback complete · ' + label + ' at ' + formatTime(response) + (activeMode === 'CM' || activeMode === 'PA' ? '; no user question.' : '.');
+    }
     const query = timeInSeconds(activeExample.query_time);
     const evidence = timeInSeconds(activeExample.evidence_time);
     const deadline = timeInSeconds(activeExample.deadline);
@@ -196,6 +205,11 @@
       return response != null && sourceTime >= response
         ? 'Recorded replay · Automatic alert emitted at ' + formatTime(response) + '; no user question.'
         : 'Recorded replay · Before the phase-transition alert; no user question.';
+    }
+    if (activeMode === 'CM') {
+      return response != null && sourceTime >= response
+        ? 'Recorded replay · Summary written at ' + formatTime(response) + '; no user question.'
+        : 'Recorded replay · Waiting for memory write at ' + formatTime(response) + '; no user question.';
     }
     if (activeMode === 'BM') {
       return response != null && sourceTime >= response
@@ -321,11 +335,11 @@
       return;
     }
     if (example.clip) {
-      video.src = example.clip;
+      video.src = mediaURL(example.clip);
       video.hidden = false;
-      if (example.poster) video.poster = example.poster;
+      if (example.poster) video.poster = mediaURL(example.poster);
     } else if (example.poster) {
-      still.src = example.poster;
+      still.src = mediaURL(example.poster);
       still.alt = [example.title || descriptor.title, example.source].filter(Boolean).join(' — ');
       still.hidden = false;
     }
@@ -334,7 +348,10 @@
     const range = example.start === example.end ? formatTime(example.start) : [formatTime(example.start), formatTime(example.end)].filter(Boolean).join(' — ');
     setText('example-range', range);
     setText('example-caption', example.caption || 'Edited replay. Source timestamps refer to the original surgical recording.');
-    setText('example-query', example.query || example.caption || 'No user question: this mode writes a proactive output.');
+    const proactiveText = mode === 'CM'
+      ? 'No user question. The model writes a phase summary to memory.'
+      : mode === 'PA' ? 'No user question. The model issues an automatic phase-transition alert.' : null;
+    setText('example-query', example.query || proactiveText || example.caption || 'No user question: this mode writes a proactive output.');
     setText('example-answer', example.display_answer || example.answer || 'No recorded response in the selected window.');
     setText('query-time', formatTime(example.query_time));
     setText('answer-time', formatTime(example.response_time));
