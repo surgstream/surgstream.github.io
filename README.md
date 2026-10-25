@@ -26,12 +26,19 @@ Internal navigation, media, styles and scripts use relative paths, so the files 
 
 ## Content and provenance
 
+The Updates section records the confirmed availability of the project website and research manuscript on 2026-10-25. arXiv and publication updates will be added when confirmed. Main headings, metadata and key descriptions use the manuscript title and wording, including “what to remember and when to respond”.
+
+WAM/DTL flow nodes use 20px text with 26px arrows on desktop and stack vertically on mobile. BibTeX remains expanded with a copy button. Film download links have been removed; native video players use `controlslist="nodownload"` to request that supporting browsers hide the download control.
+
+`media-guard.js` blocks image/video context menus and dragging, with `draggable="false"` and CSS mobile callout restrictions; text selection and BibTeX copying remain available, and public static media can still be saved intentionally.
+
 - `assets/surgstream-promo.mp4`: 40-second silent H.264 film, 1920×1080, 30fps. The original full owl logo and wordmark are prominent in the opening and closing, with a consistent header during demonstrations. Like the supplied reference, its story is carried by on-screen text. English and Chinese captions are included.
 - `assets/clip-*.mp4`: continuous excerpts of the source recordings; FP keeps the full 72-second interval.
 - `assets/demo-data.json`: exact recorded answers, full RT multiple-choice prompt, source timestamps, question-snapshot hash and model-adapter hash. The RT display removes the option letter and adds spaces to the phase name; the raw output is preserved separately.
 - `benchmark.html` and `assets/benchmark-guide.json`: definitions, timing windows, scoring rules and reference examples for T1–T14; the five temporal modes and five clinical scenarios; causal input and procedure-level split handling. The guide page works without JavaScript. Its examples are label-derived targets from CholecT50 VID06, distinct from the selected recorded model outputs. Source code and question-snapshot hashes identify the audited definitions.
 - `assets/poster-cm.jpg`: a single actual source frame, displayed as a still image.
-- `assets/surgstream-manuscript.pdf`: the local research manuscript snapshot used for this draft page.
+- `assets/surgstream-manuscript.pdf`: the research manuscript snapshot linked from the Updates entry.
+- `assets/method-wam.svg` and `assets/method-dtl.svg`: vector crops of the manuscript's original framework artwork, displayed as clickable previews with an on-page dialog and Zoom control.
 - `assets/surgstream-logo.png`, `surgstream-wordmark.png` and `surgstream-icon.png`: unchanged artwork exported from the manuscript's `SurgStream_Logo.pdf`, with surrounding whitespace cropped. The owl and original burgundy-to-black wordmark are used throughout the page and film. Main colors follow the paper's `#B8324F`, `#1A1A1A` and warm ivory; WAM/DTL retain their respective method colors.
 - `assets/surgstream-logo-transparent.png`, `surgstream-icon-transparent.png` and `favicon-transparent.png`: transparent navigation exports from the same original vector artwork, with only its two page-sized white background paths omitted. Internal white details remain opaque. The browser favicon and navigation wordmark use these assets.
 

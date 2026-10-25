@@ -155,4 +155,35 @@
     clearTimeout(resetCopyLabel);
     resetCopyLabel = setTimeout(() => { if (copyLabel) copyLabel.textContent = 'Copy BibTeX'; }, 2500);
   });
+
+  const diagramDialog = document.getElementById('method-diagram-dialog');
+  const expandedDiagram = document.getElementById('expanded-method-diagram');
+  const diagramScroll = diagramDialog.querySelector('.method-diagram-scroll');
+  const diagramZoom = document.getElementById('zoom-method-diagram');
+  document.querySelectorAll('[data-method-diagram]').forEach(button => {
+    button.addEventListener('click', () => {
+      const image = button.querySelector('img');
+      expandedDiagram.src = image.getAttribute('src');
+      expandedDiagram.alt = image.alt;
+      setText('method-diagram-title', button.dataset.methodDiagram === 'wam'
+        ? 'Workflow-Anchored Memory' : 'Deadline-aware Transition Learning');
+      diagramScroll.classList.remove('is-zoomed');
+      diagramZoom.setAttribute('aria-pressed', 'false');
+      diagramZoom.textContent = 'Zoom in';
+      diagramDialog.showModal();
+      diagramScroll.scrollTo(0, 0);
+    });
+  });
+  diagramZoom.addEventListener('click', () => {
+    const zoomed = diagramScroll.classList.toggle('is-zoomed');
+    diagramZoom.setAttribute('aria-pressed', String(zoomed));
+    diagramZoom.textContent = zoomed ? 'Fit to screen' : 'Zoom in';
+  });
+  document.getElementById('close-method-diagram').addEventListener('click', () => diagramDialog.close());
+  diagramDialog.addEventListener('click', event => {
+    if (event.target !== diagramDialog) return;
+    const bounds = diagramDialog.getBoundingClientRect();
+    if (event.clientX < bounds.left || event.clientX > bounds.right
+      || event.clientY < bounds.top || event.clientY > bounds.bottom) diagramDialog.close();
+  });
 })();
