@@ -9,7 +9,7 @@
   <title>SurgStream-Bench · 14 Tasks, Five Temporal Modes</title>
   <link rel="canonical" href="https://surgstream.github.io/benchmark.html">
   <link rel="icon" type="image/png" href="assets/favicon-transparent.png">
-  <link rel="stylesheet" href="styles.css?v=c710eeba4f88">
+  <link rel="stylesheet" href="styles.css?v=dec28fa61b2b">
   <script defer src="media-guard.js?v=0f0ef3bf8658"></script>
 </head>
 <body class="benchmark-page">
@@ -24,6 +24,9 @@
       <div class="shell">
         <div class="section-kicker"><span>SurgStream-Bench / Field guide</span><span class="kicker-end">Five temporal modes · fourteen tasks</span></div>
         <div class="guide-heading"><div><h1 id="guide-title" class="guide-page-title">SurgStream-Bench<br><em>task by task.</em></h1><p>A guide to the 14 tasks, five temporal modes and five clinical scenarios in the benchmark.</p></div><a class="button button-light" href="assets/benchmark-guide.json" download>Download the guide <span aria-hidden="true">↓</span></a></div>
+
+        <nav class="guide-contents" aria-label="Guide contents"><a href="#mode-comparison">Five modes</a><a href="#benchmark-tasks">All tasks</a><a href="#scenario-mapping-title">Clinical scenarios</a><a href="#evaluation-guide-title">Evaluation</a></nav>
+        <nav class="guide-mode-jumps" aria-label="Jump to tasks by temporal mode"><a href="#mode-RT" style="--mode-color:#2B7FB0;--mode-ink:#1D618C;--mode-wash:#EDF5FA"><span class="guide-mode-badge" style="--mode-color:#2B7FB0;--mode-ink:#1D618C;--mode-wash:#EDF5FA">RT</span><span>Real-time perception</span><small>3</small></a><a href="#mode-BM" style="--mode-color:#7030A0;--mode-ink:#7030A0;--mode-wash:#F5EFFA"><span class="guide-mode-badge" style="--mode-color:#7030A0;--mode-ink:#7030A0;--mode-wash:#F5EFFA">BM</span><span>Backward memory</span><small>5</small></a><a href="#mode-FP" style="--mode-color:#C55A11;--mode-ink:#99430D;--mode-wash:#FCF0E7"><span class="guide-mode-badge" style="--mode-color:#C55A11;--mode-ink:#99430D;--mode-wash:#FCF0E7">FP</span><span>Forward proactive QA</span><small>2</small></a><a href="#mode-PA" style="--mode-color:#BF9000;--mode-ink:#7C5D00;--mode-wash:#FCF5DF"><span class="guide-mode-badge" style="--mode-color:#BF9000;--mode-ink:#7C5D00;--mode-wash:#FCF5DF">PA</span><span>Proactive alert</span><small>2</small></a><a href="#mode-CM" style="--mode-color:#548235;--mode-ink:#3F6528;--mode-wash:#F0F5E9"><span class="guide-mode-badge" style="--mode-color:#548235;--mode-ink:#3F6528;--mode-wash:#F0F5E9">CM</span><span>Caption memory</span><small>2</small></a></nav>
 
         <div class="guide-construction" aria-label="Benchmark construction and procedure splits">
           <article><span class="guide-label">01 / Causal input</span><h3>One frame per second.<br> Only what is available.</h3><p>A causal surgical video stream sampled at one frame per second. At each step, only frames and dialogue already available may be used; persistent memory can retain earlier observations.</p></article>
@@ -42,9 +45,8 @@
           </tbody></table></div>
         </section>
 
-        <div class="guide-task-intro"><div><span class="guide-label">Explore all fourteen tasks</span><h3>From the current scene<br> to the complete procedure.</h3></div><p>Open a task to inspect its evidence, answer format, timing and evaluation rule. The reference examples illustrate the annotation targets.</p></div>
+        <div id="benchmark-tasks" class="guide-task-intro"><div><span class="guide-label">Explore all fourteen tasks</span><h3>From the current scene<br> to the complete procedure.</h3></div><p>Open a task to inspect its evidence, answer format, timing and evaluation rule. The reference examples illustrate the annotation targets.</p></div>
         <aside class="reference-notice"><span class="reference-notice-label">About the examples</span><p>Task examples are label-derived reference targets from CholecT50 VID06, not additional model predictions. Choice letters are omitted and categorical names are spaced for readability. Structured examples retain the canonical vocabulary. Recorded model examples appear in the separate <a href="index.html#examples">demonstration section</a>.</p></aside>
-        <nav class="guide-mode-jumps" aria-label="Jump to tasks by temporal mode"><a href="#mode-RT" style="--mode-color:#2B7FB0;--mode-ink:#1D618C;--mode-wash:#EDF5FA"><span class="guide-mode-badge" style="--mode-color:#2B7FB0;--mode-ink:#1D618C;--mode-wash:#EDF5FA">RT</span><span>Real-time perception</span><small>3</small></a><a href="#mode-BM" style="--mode-color:#7030A0;--mode-ink:#7030A0;--mode-wash:#F5EFFA"><span class="guide-mode-badge" style="--mode-color:#7030A0;--mode-ink:#7030A0;--mode-wash:#F5EFFA">BM</span><span>Backward memory</span><small>5</small></a><a href="#mode-FP" style="--mode-color:#C55A11;--mode-ink:#99430D;--mode-wash:#FCF0E7"><span class="guide-mode-badge" style="--mode-color:#C55A11;--mode-ink:#99430D;--mode-wash:#FCF0E7">FP</span><span>Forward proactive QA</span><small>2</small></a><a href="#mode-PA" style="--mode-color:#BF9000;--mode-ink:#7C5D00;--mode-wash:#FCF5DF"><span class="guide-mode-badge" style="--mode-color:#BF9000;--mode-ink:#7C5D00;--mode-wash:#FCF5DF">PA</span><span>Proactive alert</span><small>2</small></a><a href="#mode-CM" style="--mode-color:#548235;--mode-ink:#3F6528;--mode-wash:#F0F5E9"><span class="guide-mode-badge" style="--mode-color:#548235;--mode-ink:#3F6528;--mode-wash:#F0F5E9">CM</span><span>Caption memory</span><small>2</small></a></nav>
 
       <section id="mode-RT" class="task-mode-group" style="--mode-color:#2B7FB0;--mode-ink:#1D618C;--mode-wash:#EDF5FA" aria-labelledby="mode-title-RT">
         <div class="task-mode-heading"><div class="mode-title-line"><span class="guide-mode-badge" style="--mode-color:#2B7FB0;--mode-ink:#1D618C;--mode-wash:#EDF5FA">RT</span><h3 id="mode-title-RT">Real-time perception</h3><span class="mode-task-count">3 tasks</span></div><p class="mode-question">What is happening now?</p><p class="mode-explanation">Answer an explicit question about the current surgical scene. The relevant evidence is available when the question arrives.</p><dl class="mode-facts"><div><dt>Evidence</dt><dd>Current phase, visible instruments, action triplets or the anatomical target.</dd></div><div><dt>Output</dt><dd>A categorical scene description.</dd></div><div><dt>Evaluation</dt><dd>Accuracy</dd></div></dl></div>
@@ -84,6 +86,7 @@
           </article>
         </div>
         <a class="guide-return" href="#mode-comparison">Back to mode comparison <span aria-hidden="true">↑</span></a>
+        <a class="guide-return" href="index.html?mode=RT#examples">Watch the recorded RT example <span aria-hidden="true">→</span></a>
       </section>
 
       <section id="mode-BM" class="task-mode-group" style="--mode-color:#7030A0;--mode-ink:#7030A0;--mode-wash:#F5EFFA" aria-labelledby="mode-title-BM">
@@ -148,6 +151,7 @@
           </article>
         </div>
         <a class="guide-return" href="#mode-comparison">Back to mode comparison <span aria-hidden="true">↑</span></a>
+        <a class="guide-return" href="index.html?mode=BM#examples">Watch the recorded BM example <span aria-hidden="true">→</span></a>
       </section>
 
       <section id="mode-FP" class="task-mode-group" style="--mode-color:#C55A11;--mode-ink:#99430D;--mode-wash:#FCF0E7" aria-labelledby="mode-title-FP">
@@ -177,6 +181,7 @@
           </article>
         </div>
         <a class="guide-return" href="#mode-comparison">Back to mode comparison <span aria-hidden="true">↑</span></a>
+        <a class="guide-return" href="index.html?mode=FP#examples">Watch the recorded FP example <span aria-hidden="true">→</span></a>
       </section>
 
       <section id="mode-PA" class="task-mode-group" style="--mode-color:#BF9000;--mode-ink:#7C5D00;--mode-wash:#FCF5DF" aria-labelledby="mode-title-PA">
@@ -206,6 +211,7 @@
           </article>
         </div>
         <a class="guide-return" href="#mode-comparison">Back to mode comparison <span aria-hidden="true">↑</span></a>
+        <a class="guide-return" href="index.html?mode=PA#examples">Watch the recorded PA example <span aria-hidden="true">→</span></a>
       </section>
 
       <section id="mode-CM" class="task-mode-group" style="--mode-color:#548235;--mode-ink:#3F6528;--mode-wash:#F0F5E9" aria-labelledby="mode-title-CM">
@@ -240,6 +246,7 @@ P3 ClippingCutting 20:28-23:26
           </article>
         </div>
         <a class="guide-return" href="#mode-comparison">Back to mode comparison <span aria-hidden="true">↑</span></a>
+        <a class="guide-return" href="index.html?mode=CM#examples">Watch the recorded CM example <span aria-hidden="true">→</span></a>
       </section>
 
         <section class="guide-scenarios" aria-labelledby="scenario-mapping-title"><div class="guide-subheading"><div><span class="guide-label">What the interaction concerns</span><h3 id="scenario-mapping-title">Five clinical scenarios</h3></div><p>Temporal modes describe <em>when</em> an interaction happens; clinical scenarios describe <em>what</em> it concerns. They are two views of the same fourteen tasks.</p></div><div class="scenario-mapping"><table><caption class="sr-only">Clinical scenarios and their task assignments.</caption><thead><tr><th scope="col">Scenario</th><th scope="col">Clinical focus</th><th scope="col">Tasks</th></tr></thead><tbody><tr><th scope="row"><span>S1</span>Workflow</th><td>Identify, time and anticipate surgical phases.</td><td><a class="task-id-link" href="#task-T1">T1</a><a class="task-id-link" href="#task-T2">T2</a><a class="task-id-link" href="#task-T3">T3</a><a class="task-id-link" href="#task-T4">T4</a><a class="task-id-link" href="#task-T5">T5</a></td></tr>
@@ -258,6 +265,6 @@ P3 ClippingCutting 20:28-23:26
       </div>
     </section>
   </main>
-  <footer class="site-footer shell"><a class="wordmark" href="index.html"><img src="assets/surgstream-logo-transparent.png" alt="SurgStream" width="180" height="61"></a><div><p>Real-time surgical video understanding.</p><small>Structure and presentation inspired by <a href="https://surgsigma.github.io/" target="_blank" rel="noopener">SurgΣ</a> and the <a href="https://github.com/eliahuhorwitz/Academic-project-page-template" target="_blank" rel="noopener">Academic Project Page Template</a>. Original implementation.</small></div><a class="back-top" href="#main">Back to top <span aria-hidden="true">↑</span></a></footer>
+  <footer class="site-footer shell"><a class="wordmark" href="index.html"><img src="assets/surgstream-logo-transparent.png" alt="SurgStream" width="180" height="61"></a><div><p>Real-time surgical video understanding.</p><small>Structure and presentation inspired by <a href="https://surgsigma.github.io/" target="_blank" rel="noopener">SurgΣ</a>, <a href="https://mcg-nju.github.io/OneStreamer/" target="_blank" rel="noopener">OneStreamer</a> and the <a href="https://github.com/eliahuhorwitz/Academic-project-page-template" target="_blank" rel="noopener">Academic Project Page Template</a>. Original implementation.</small></div><a class="back-top" href="#main">Back to top <span aria-hidden="true">↑</span></a></footer>
 </body>
 </html>

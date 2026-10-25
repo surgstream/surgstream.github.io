@@ -1,6 +1,6 @@
 # SurgStream project page
 
-A concise academic project homepage with a 40-second research film, five selected recorded examples and a benchmark overview. The complete 14-task guide is on `benchmark.html`, linked from the homepage. This folder is the complete website. It uses relative paths, local fonts and native media playback; it needs no build process or backend.
+A concise academic project homepage with a 40-second research film, five selected recorded examples, a benchmark overview and a compact comparison from the manuscript. The complete 14-task guide is on `benchmark.html`, linked from the homepage. This folder is the complete website. It uses relative paths, local fonts and native media playback; it needs no build process or backend.
 
 ## Preview locally
 
@@ -11,6 +11,8 @@ python3 -m http.server 4173 --bind 127.0.0.1
 ```
 
 Open http://127.0.0.1:4173/ .
+
+For video seeking during development, the preparation workspace also provides `tools/preview_site.py`: run it from the parent `web-promo/` folder and open http://127.0.0.1:4175/site/ . It supports HTTP byte ranges, which Python's basic `http.server` does not. GitHub Pages handles range requests in production.
 
 ## Deployment
 
@@ -29,6 +31,10 @@ Styles and interactive scripts include content-hash query versions so a new depl
 ## Content and provenance
 
 The Updates section records the confirmed availability of the project website and research manuscript on 2026-10-25. arXiv and publication updates will be added when confirmed. Main headings, metadata and key descriptions use the manuscript title and wording, including “what to remember and when to respond”.
+
+The sticky navigation highlights the current homepage section and collapses into a Menu on smaller screens. The five-mode player provides a source-video clock, event timeline, Replay and Jump to response controls. The transcript stays readable throughout playback; these are recorded outputs, not a live model session. Timeline events outside an excerpt remain labeled, non-seekable markers. CM uses a still frame with playback controls disabled. A URL such as `index.html?mode=FP#examples` opens a particular mode, and each example links to its task definition. The guide adds a contents menu and links back to each mode's recorded example.
+
+Results at a glance reports Table 1's five-mode comparison and Figure 4's efficiency measurements from the linked 13:08 manuscript snapshot. The +6.00 difference is in percentage points; timing measurements use full-length test videos at 1 fps on a single GPU. The section does not claim a worst-case latency guarantee.
 
 WAM/DTL flow nodes use 20px text with 26px arrows on desktop and stack vertically on mobile. BibTeX remains expanded with a copy button. Film download links have been removed; native video players use `controlslist="nodownload"` to request that supporting browsers hide the download control.
 
@@ -54,6 +60,6 @@ The formal benchmark retains categorical multiple-choice questions for T1, T6, T
 
 Surgical footage and annotations originate from [Cholec80](https://camma.unistra.fr/datasets/) and [CholecT50](https://github.com/CAMMA-public/cholect50), provided by CAMMA. Shared VID73/VID32 recordings are shown using the project's existing Cholec80 video copies and CholecT50 benchmark labels. Dataset terms continue to govern the excerpts; no new license to the footage or annotations is granted by this package.
 
-Fonts are DM Sans and Newsreader, distributed under the included SIL Open Font License files. The page layout was inspired by [SurgΣ](https://surgsigma.github.io/) and [Academic Project Page Template](https://github.com/eliahuhorwitz/Academic-project-page-template): centered title and author information, a film, modular research sections, resource links and BibTeX. This site's implementation is original and its brand artwork comes from the SurgStream manuscript. No source code, images or claims from the referenced projects are included.
+Fonts are DM Sans and Newsreader, distributed under the included SIL Open Font License files. The page layout was inspired by [SurgΣ](https://surgsigma.github.io/), [OneStreamer](https://mcg-nju.github.io/OneStreamer/) and [Academic Project Page Template](https://github.com/eliahuhorwitz/Academic-project-page-template): centered title and author information, a film, modular research sections, clear evidence/response timing, concise results, resource links and BibTeX. This site's implementation is original and its brand artwork comes from the SurgStream manuscript. No source code or images from the referenced projects are included; comparison values come from the linked SurgStream manuscript.
 
 Only this folder is intended for publication. Internal source audits, review records and preparation tools are kept outside it.

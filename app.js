@@ -15,17 +15,37 @@
   const video = document.getElementById('example-video');
   const still = document.getElementById('example-still');
   const panel = document.getElementById('example-panel');
+  const clock = document.getElementById('example-clock');
+  const timeline = document.getElementById('example-timeline');
+  const replayButton = document.getElementById('replay-example');
+  const jumpButton = document.getElementById('jump-response');
+  const taskLink = document.getElementById('example-task-link');
+  const reducedMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)');
+  let activeMode = 'RT';
+  let activeExample = null;
+  let timelineEvents = [];
+  let pendingSeek = null;
+  let playbackGeneration = 0;
+  let playbackNotice = '';
 
   const setText = (id, text) => {
     const node = document.getElementById(id);
-    if (node) node.textContent = text == null ? '' : String(text);
+    const value = text == null ? '' : String(text);
+    if (node && node.textContent !== value) node.textContent = value;
   };
 
+  function timeInSeconds(value) {
+    if (value == null || value === '') return null;
+    const seconds = typeof value === 'string' && value.includes(':')
+      ? value.split(':').reduce((total, part) => total * 60 + Number(part), 0)
+      : Number(value);
+    return Number.isFinite(seconds) && seconds >= 0 ? seconds : null;
+  }
+
   function formatTime(value) {
-    if (value == null || value === '') return '';
-    if (typeof value === 'string' && value.includes(':')) return value;
-    const seconds = Math.max(0, Math.floor(Number(value)));
-    if (!Number.isFinite(seconds)) return String(value);
+    const parsed = timeInSeconds(value);
+    if (parsed == null) return '';
+    const seconds = Math.floor(parsed);
     const hours = Math.floor(seconds / 3600);
     const minutes = Math.floor((seconds % 3600) / 60);
     const remainder = seconds % 60;
@@ -34,37 +54,252 @@
 
   function renderRecords(records) {
     const container = document.getElementById('example-records');
+    if (!container) return;
     container.replaceChildren();
     const entries = Array.isArray(records) ? records : [];
     container.hidden = !entries.length;
     entries.forEach(record => {
       const row = document.createElement('div');
       row.className = 'record-entry';
-      if (typeof record === 'string') {
-        row.textContent = record;
-      } else if (record && typeof record === 'object') {
-        const time = formatTime(record.time ?? record.t ?? record.timestamp);
-        const type = record.type || record.state || '';
-        const text = record.text || record.content || record.answer || '';
-        row.textContent = [time && '[' + time + ']', type, text].filter(Boolean).join(' · ');
+      const structured = record && typeof record === 'object';
+      const meta = document.createElement('div');
+      meta.className = 'record-meta';
+      const type = document.createElement('strong');
+      type.className = 'record-type';
+      type.textContent = structured ? record.type || record.state || 'Memory record' : 'Memory record';
+      meta.append(type);
+      const sourceTime = structured ? timeInSeconds(record.time ?? record.t ?? record.timestamp) : null;
+      if (sourceTime != null) {
+        const time = document.createElement('time');
+        time.className = 'record-time';
+        time.dateTime = 'PT' + sourceTime + 'S';
+        time.textContent = 'Source ' + formatTime(sourceTime);
+        meta.append(time);
       }
+      const emitted = structured ? timeInSeconds(record.emitted_at) : null;
+      if (emitted != null && emitted !== sourceTime) {
+        const written = document.createElement('span');
+        written.className = 'record-emitted';
+        written.textContent = 'Written ' + formatTime(emitted);
+        meta.append(written);
+      }
+      const text = document.createElement('p');
+      text.className = 'record-text';
+      text.textContent = structured ? record.text || record.content || record.answer || '' : String(record ?? '');
+      row.append(meta, text);
       container.append(row);
     });
   }
 
-  function selectMode(mode, moveFocus = false) {
-    const descriptor = modes[mode] || modes.RT;
+  function validMode(value) {
+    const mode = String(value || '').toUpperCase();
+    return Object.prototype.hasOwnProperty.call(modes, mode) ? mode : null;
+  }
+
+  function modeFromURL() {
+    try { return validMode(new URL(window.location.href).searchParams.get('mode')); }
+    catch { return null; }
+  }
+
+  function rememberMode(mode, hash) {
+    try {
+      const url = new URL(window.location.href);
+      url.searchParams.set('mode', mode);
+      if (hash != null) url.hash = hash;
+      window.history.replaceState(window.history.state, '', url.href);
+    } catch {
+      // Local file previews may disallow history changes; the controls still work.
+    }
+  }
+
+  function excerptRange(example = activeExample) {
+    const start = timeInSeconds(example?.start) ?? 0;
+    return { start, end: timeInSeconds(example?.end) ?? start };
+  }
+
+  function canSeekTo(sourceTime) {
+    if (!activeExample?.clip || sourceTime == null) return false;
+    const { start, end } = excerptRange();
+    return sourceTime >= start && sourceTime <= end;
+  }
+
+  function renderTimeline(example) {
+    timelineEvents = [];
+    if (!timeline) return;
+    timeline.replaceChildren();
+    if (!example) return;
+    const add = (kind, label, value) => {
+      const time = timeInSeconds(value);
+      if (time != null) timelineEvents.push({ kind, label, time });
+    };
+    const { start } = excerptRange(example);
+    (Array.isArray(example.records) ? example.records : []).forEach(record => {
+      if (!record || typeof record !== 'object') return;
+      const time = timeInSeconds(record.time ?? record.t ?? record.timestamp);
+      if (time != null && time < start) add('memory', 'Earlier memory', time);
+    });
+    add('query', 'Question', example.query_time);
+    add('evidence', 'Evidence available', example.evidence_time);
+    add('response', activeMode === 'PA' ? 'Automatic alert' : activeMode === 'CM' ? 'Memory write' : 'Recorded response', example.response_time);
+    add('deadline', 'Deadline', example.deadline);
+    timelineEvents.sort((a, b) => a.time - b.time);
+    timelineEvents.forEach(event => {
+      const row = document.createElement('li');
+      row.className = 'timeline-event';
+      row.dataset.event = event.kind;
+      const seekable = canSeekTo(event.time);
+      row.classList.toggle('is-outside', Boolean(example.clip) && !seekable);
+      const marker = document.createElement(seekable ? 'button' : 'span');
+      marker.className = seekable ? 'timeline-seek' : 'timeline-marker';
+      if (seekable) {
+        marker.type = 'button';
+        const action = event.kind === 'query' ? 'question' : event.kind === 'response' ? 'response' : event.kind;
+        marker.setAttribute('aria-label', 'Seek to ' + action + ' at ' + formatTime(event.time));
+        marker.addEventListener('click', () => seekToSource(event.time));
+      }
+      const label = document.createElement('strong');
+      label.className = 'timeline-label';
+      label.textContent = event.label;
+      const time = document.createElement('time');
+      time.className = 'timeline-time';
+      time.dateTime = 'PT' + event.time + 'S';
+      time.textContent = formatTime(event.time);
+      marker.append(label, time);
+      if (!seekable) {
+        const note = document.createElement('span');
+        note.className = 'timeline-note';
+        note.textContent = example.clip ? 'Outside this excerpt' : 'Still frame';
+        marker.append(note);
+      }
+      row.append(marker);
+      timeline.append(row);
+      event.node = row;
+    });
+  }
+
+  function replayState(sourceTime) {
+    if (!activeExample) return 'No recorded example is available.';
+    const response = timeInSeconds(activeExample.response_time);
+    if (!activeExample.clip) return 'Still frame · Model-generated memory write at ' + formatTime(response) + '.';
+    if (video?.ended || sourceTime >= excerptRange().end) return 'Recorded playback complete · Response at ' + formatTime(response) + '.';
+    const query = timeInSeconds(activeExample.query_time);
+    const evidence = timeInSeconds(activeExample.evidence_time);
+    const deadline = timeInSeconds(activeExample.deadline);
+    if (activeMode === 'FP') {
+      if (query != null && sourceTime < query) return 'Recorded replay · Before the question at ' + formatTime(query) + '.';
+      if (evidence != null && sourceTime < evidence) return 'Recorded replay · Waiting for evidence after the question.';
+      if (response != null && sourceTime < response) return 'Recorded replay · Evidence available; response not yet emitted.';
+      if (deadline != null && sourceTime > deadline) return 'Recorded replay · Response window ended; reply was emitted at ' + formatTime(response) + '.';
+      return 'Recorded replay · Response emitted at ' + formatTime(response) + '.';
+    }
+    if (activeMode === 'PA') {
+      return response != null && sourceTime >= response
+        ? 'Recorded replay · Automatic alert emitted at ' + formatTime(response) + '; no user question.'
+        : 'Recorded replay · Before the phase-transition alert; no user question.';
+    }
+    if (activeMode === 'BM') {
+      return response != null && sourceTime >= response
+        ? 'Recorded replay · Response emitted using earlier procedural memory.'
+        : 'Recorded replay · Earlier memory is available; the question arrives at ' + formatTime(query) + '.';
+    }
+    return response != null && sourceTime >= response
+      ? 'Recorded replay · Current-scene response emitted at ' + formatTime(response) + '.'
+      : 'Recorded replay · Before the current-scene question at ' + formatTime(query) + '.';
+  }
+
+  function updateReplay() {
+    const { start } = excerptRange();
+    const offset = activeExample?.clip && Number.isFinite(video?.currentTime) ? video.currentTime : 0;
+    const sourceTime = start + offset;
+    if (clock) {
+      clock.textContent = activeExample ? formatTime(sourceTime) + (activeExample.clip ? '' : ' · Still frame') : '—';
+      if (activeExample) clock.dateTime = 'PT' + Math.floor(sourceTime) + 'S';
+      else clock.removeAttribute('datetime');
+    }
+    let current = -1;
+    timelineEvents.forEach((event, index) => { if (event.time <= sourceTime) current = index; });
+    timelineEvents.forEach((event, index) => {
+      const state = index === current ? 'current' : event.time <= sourceTime ? 'past' : 'upcoming';
+      event.node.classList.toggle('is-current', state === 'current');
+      event.node.classList.toggle('is-past', state === 'past');
+      event.node.classList.toggle('is-upcoming', state === 'upcoming');
+      event.node.dataset.state = state;
+      if (state === 'current') event.node.setAttribute('aria-current', 'step');
+      else event.node.removeAttribute('aria-current');
+    });
+    setText('replay-status', playbackNotice || replayState(sourceTime));
+  }
+
+  function applyPendingSeek() {
+    if (!pendingSeek || !activeExample?.clip || !video || video.readyState < 1) return;
+    const request = pendingSeek;
+    if (request.generation !== playbackGeneration) { pendingSeek = null; return; }
+    const duration = Number.isFinite(video.duration) ? video.duration : excerptRange().end - excerptRange().start;
+    try {
+      video.currentTime = Math.max(0, Math.min(request.offset, duration));
+    } catch {
+      // Keep the request until metadata/canplay makes the new source seekable.
+      return;
+    }
+    pendingSeek = null;
+    playbackNotice = '';
+    updateReplay();
+    if (!request.play) return;
+    try {
+      const playing = video.play();
+      if (playing && typeof playing.catch === 'function') playing.catch(() => {
+        if (request.generation !== playbackGeneration) return;
+        playbackNotice = 'Recorded replay is paused. Use the video controls to start playback.';
+        updateReplay();
+      });
+    } catch {
+      playbackNotice = 'Recorded replay is paused. Use the video controls to start playback.';
+      updateReplay();
+    }
+  }
+
+  function seekToSource(sourceTime, play = false) {
+    if (!video || !canSeekTo(sourceTime)) return;
+    video.pause();
+    playbackNotice = '';
+    pendingSeek = { offset: sourceTime - excerptRange().start, play, generation: playbackGeneration };
+    if (video.readyState < 1) playbackNotice = 'Loading recorded footage; the transcript remains available.';
+    applyPendingSeek();
+    updateReplay();
+  }
+
+  function selectMode(value, moveFocus = false, updateURL = true) {
+    const mode = validMode(value) || 'RT';
+    const descriptor = modes[mode];
     const example = examples.find(item => String(item.mode).toUpperCase() === mode);
+    activeMode = mode;
+    activeExample = example || null;
+    playbackGeneration += 1;
+    pendingSeek = null;
+    playbackNotice = '';
+    if (updateURL) rememberMode(mode);
     tabs.forEach(tab => {
       const active = tab.dataset.mode === mode;
       tab.setAttribute('aria-selected', String(active));
       tab.tabIndex = active ? 0 : -1;
       if (active && moveFocus) tab.focus();
     });
-    panel.setAttribute('aria-labelledby', 'tab-' + mode);
+    panel?.setAttribute('aria-labelledby', 'tab-' + mode);
     setText('example-mode', descriptor.name);
     setText('example-title', example?.title || descriptor.title);
     setText('mode-description', descriptor.description);
+    setText('query-label', mode === 'PA' ? 'Automatic alert' : mode === 'CM' ? 'Memory write' : 'Question');
+    if (replayButton) replayButton.disabled = !example?.clip;
+    if (jumpButton) jumpButton.disabled = !canSeekTo(timeInSeconds(example?.response_time));
+    if (taskLink) {
+      taskLink.hidden = !/^T(?:[1-9]|1[0-4])$/.test(example?.task || '');
+      if (!taskLink.hidden) {
+        taskLink.href = 'benchmark.html#task-' + example.task;
+        taskLink.textContent = 'Task ' + example.task + ' · Benchmark guide';
+      } else taskLink.removeAttribute('href');
+    }
+    renderTimeline(example);
+    if (!video || !still) { updateReplay(); return; }
     video.pause();
     video.removeAttribute('src');
     video.removeAttribute('poster');
@@ -82,6 +317,7 @@
       setText('query-time', '');
       setText('answer-time', '');
       renderRecords([]);
+      updateReplay();
       return;
     }
     if (example.clip) {
@@ -98,11 +334,26 @@
     const range = example.start === example.end ? formatTime(example.start) : [formatTime(example.start), formatTime(example.end)].filter(Boolean).join(' — ');
     setText('example-range', range);
     setText('example-caption', example.caption || 'Edited replay. Source timestamps refer to the original surgical recording.');
-    setText('example-query', example.query || 'No user query: this mode uses a proactive output.');
+    setText('example-query', example.query || example.caption || 'No user question: this mode writes a proactive output.');
     setText('example-answer', example.display_answer || example.answer || 'No recorded response in the selected window.');
     setText('query-time', formatTime(example.query_time));
     setText('answer-time', formatTime(example.response_time));
     renderRecords(example.records);
+    updateReplay();
+  }
+
+  replayButton?.addEventListener('click', () => seekToSource(excerptRange().start, true));
+  jumpButton?.addEventListener('click', () => seekToSource(timeInSeconds(activeExample?.response_time)));
+  if (video) {
+    ['loadedmetadata', 'durationchange', 'canplay'].forEach(event => video.addEventListener(event, applyPendingSeek));
+    ['timeupdate', 'seeked', 'play', 'pause', 'ended', 'loadedmetadata'].forEach(event => video.addEventListener(event, updateReplay));
+    video.addEventListener('play', () => { playbackNotice = ''; updateReplay(); });
+    video.addEventListener('error', () => {
+      if (!activeExample?.clip) return;
+      pendingSeek = null;
+      playbackNotice = 'This recorded clip could not be loaded. Its question and response remain available.';
+      updateReplay();
+    });
   }
 
   tabs.forEach((tab, index) => {
@@ -118,9 +369,66 @@
       selectMode(tabs[next].dataset.mode, true);
     });
   });
+  document.querySelectorAll('a[data-example-mode]').forEach(link => {
+    link.addEventListener('click', event => {
+      if (event.defaultPrevented || event.button > 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+      const mode = validMode(link.dataset.exampleMode);
+      if (!mode) return;
+      event.preventDefault();
+      selectMode(mode, true, false);
+      rememberMode(mode, '#examples');
+      document.getElementById('examples')?.scrollIntoView({ behavior: reducedMotion?.matches ? 'auto' : 'smooth', block: 'start' });
+    });
+  });
   if (data.sourceNote) setText('source-note', data.sourceNote);
   const firstMode = examples[0] && String(examples[0].mode).toUpperCase();
-  selectMode(modes[firstMode] ? firstMode : 'RT');
+  selectMode(modeFromURL() || validMode(firstMode) || 'RT', false, false);
+  window.addEventListener('popstate', () => selectMode(modeFromURL() || validMode(firstMode) || 'RT', false, false));
+
+  const navToggle = document.getElementById('nav-toggle');
+  const projectNav = document.getElementById('project-nav');
+  if (navToggle && projectNav) {
+    const header = navToggle.closest('header');
+    const navLinks = [...projectNav.querySelectorAll('a')];
+    const setNavOpen = open => {
+      navToggle.setAttribute('aria-expanded', String(open));
+      projectNav.classList.toggle('is-open', open);
+      header?.classList.toggle('nav-open', open);
+    };
+    document.body.classList.add('has-site-nav');
+    setNavOpen(false);
+    navToggle.addEventListener('click', () => setNavOpen(navToggle.getAttribute('aria-expanded') !== 'true'));
+    navLinks.forEach(link => link.addEventListener('click', () => setNavOpen(false)));
+    document.addEventListener('keydown', event => {
+      if (event.key !== 'Escape' || navToggle.getAttribute('aria-expanded') !== 'true') return;
+      setNavOpen(false);
+      navToggle.focus({ preventScroll: true });
+    });
+    const sectionLinks = navLinks.map(link => {
+      const hash = link.getAttribute('href');
+      if (!hash?.startsWith('#')) return null;
+      const id = hash === '#approach' ? 'overview' : hash.slice(1);
+      const section = document.getElementById(id);
+      return section ? { link, section } : null;
+    }).filter(Boolean);
+    const setCurrentSection = section => {
+      navLinks.forEach(link => link.removeAttribute('aria-current'));
+      const match = sectionLinks.find(item => item.section === section);
+      match?.link.setAttribute('aria-current', 'location');
+    };
+    if ('IntersectionObserver' in window) {
+      const visible = new Set();
+      const observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) visible.add(entry.target);
+          else visible.delete(entry.target);
+        });
+        const candidates = [...visible].sort((a, b) => a.getBoundingClientRect().top - b.getBoundingClientRect().top);
+        setCurrentSection(candidates[0] || null);
+      }, { rootMargin: '-15% 0px -55% 0px', threshold: 0 });
+      sectionLinks.forEach(item => observer.observe(item.section));
+    }
+  }
 
   const copyButton = document.getElementById('copy-citation');
   const copyLabel = copyButton?.querySelector('span');
