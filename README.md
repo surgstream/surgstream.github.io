@@ -24,6 +24,8 @@ To deploy another copy:
 
 Internal navigation, media, styles and scripts use relative paths, so the files can run at either a root URL or a repository subpath. The canonical URLs in `index.html` and `benchmark.html`, and the social-preview URLs in `index.html`, point to the official `https://surgstream.github.io/` domain. Update those metadata URLs when hosting a separate copy.
 
+Styles and interactive scripts include content-hash query versions so a new deployment does not retain older browser-cached code. Update the matching version in both pages when changing those files.
+
 ## Content and provenance
 
 The Updates section records the confirmed availability of the project website and research manuscript on 2026-10-25. arXiv and publication updates will be added when confirmed. Main headings, metadata and key descriptions use the manuscript title and wording, including “what to remember and when to respond”.
