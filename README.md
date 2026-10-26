@@ -30,7 +30,7 @@ Styles and interactive scripts include content-hash query versions so a new depl
 
 ## Content and provenance
 
-The Updates section records the initial availability of the project website and research manuscript on 2026-10-25 and the manuscript refresh on 2026-10-26. arXiv and publication updates will be added when confirmed. Main headings, metadata and key descriptions use the manuscript title and wording, including “what to remember and when to respond”.
+The Updates section contains a single announcement dated 2026-10-25: “The project website and research manuscript are now available.” arXiv and publication updates will be added when confirmed. Main headings, metadata and key descriptions use the manuscript title and wording, including “what to remember and when to respond”.
 
 The sticky navigation highlights the current homepage section and collapses into a Menu on smaller screens. The five-mode player provides a source-video clock, event timeline, Replay and Jump to response controls. The transcript stays readable throughout playback; these are recorded outputs, not a live model session. Timeline events outside an excerpt remain labeled, non-seekable markers. All five modes have continuous footage; CM's memory write is 11 seconds into its 15-second excerpt. A URL such as `index.html?mode=FP#examples` opens a particular mode, and each example links to its task definition. The guide adds a contents menu and links back to each mode's recorded example.
 
