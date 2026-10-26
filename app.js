@@ -26,7 +26,6 @@
   const timeline = document.getElementById('example-timeline');
   const replayButton = document.getElementById('replay-example');
   const jumpButton = document.getElementById('jump-response');
-  const taskLink = document.getElementById('example-task-link');
   const transcript = document.querySelector('.transcript');
   const queryMessage = transcript?.querySelector('.query-message');
   const answerMessage = transcript?.querySelector('.answer-message');
@@ -379,13 +378,6 @@
     setText('query-label', mode === 'PA' ? 'Automatic alert' : mode === 'CM' ? 'Memory write' : 'Question');
     if (replayButton) replayButton.disabled = !example?.clip;
     if (jumpButton) jumpButton.disabled = !canSeekTo(timeInSeconds(example?.response_time));
-    if (taskLink) {
-      taskLink.hidden = !/^T(?:[1-9]|1[0-4])$/.test(example?.task || '');
-      if (!taskLink.hidden) {
-        taskLink.href = 'benchmark.html#task-' + example.task;
-        taskLink.textContent = 'Task ' + example.task + ' · Benchmark guide';
-      } else taskLink.removeAttribute('href');
-    }
     renderTimeline(example);
     if (!video || !still) { updateReplay(); return; }
     video.pause();

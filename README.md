@@ -1,6 +1,6 @@
 # SurgStream project page
 
-A concise academic project homepage with a 114-second research film, five selected recorded examples, a benchmark overview and a compact comparison from the manuscript. The complete 14-task guide is on `benchmark.html`, linked from the homepage. This folder is the complete website. It uses relative paths, local fonts and native media playback; it needs no build process or backend.
+A concise academic project homepage with a 114-second research film, five selected recorded examples, a benchmark overview and research resources. The benchmark covers various tasks across five temporal modes and five clinical scenarios. Detailed task-guide entry points and the results summary have been removed. The legacy `benchmark.html` address redirects to the homepage overview. This folder is the complete website. It uses relative paths, local fonts and native media playback; it needs no build process or backend.
 
 ## Preview locally
 
@@ -26,17 +26,15 @@ To deploy another copy:
 
 Internal navigation, media, styles and scripts use relative paths, so the files can run at either a root URL or a repository subpath. The canonical URLs in `index.html` and `benchmark.html`, and the social-preview URLs in `index.html`, point to the official `https://surgstream.github.io/` domain. Update those metadata URLs when hosting a separate copy.
 
-Styles and interactive scripts include content-hash query versions so a new deployment does not retain older browser-cached code. Update the matching version in both pages when changing those files.
+Styles and interactive scripts include content-hash query versions so a new deployment does not retain older browser-cached code. Update the matching version in the homepage when changing those files.
 
 ## Content and provenance
 
 The Updates section contains a single announcement dated 2026-10-25: “The project website and research manuscript are now available.” arXiv and publication updates will be added when confirmed. Main headings, metadata and key descriptions use the manuscript title and wording, including “what to remember and when to respond”.
 
-The sticky navigation highlights the current homepage section and collapses into a Menu on smaller screens. The five-mode player provides a source-video clock, event timeline, Replay and Jump to response controls. Recorded outputs appear at their source timestamps: the PA alert at 31:14 and the CM summary at 16:54. These two output cards are placed above the no-question description. In BM, Earlier memory switches to real footage around 12:08, while Back to question returns to 16:10. Other events outside an excerpt remain labeled, non-seekable markers. All five modes have continuous footage; CM's memory write is 11 seconds into its 15-second excerpt. A URL such as `index.html?mode=FP#examples` opens a particular mode, and each example links to its task definition. The guide adds a contents menu and links back to each mode's recorded example.
+The sticky navigation highlights the current homepage section and collapses into a Menu on smaller screens. The five-mode player provides a source-video clock, event timeline, Replay and Jump to response controls. Recorded outputs appear at their source timestamps: the PA alert at 31:14 and the CM summary at 16:54. These two output cards are placed above the no-question description. In BM, Earlier memory switches to real footage around 12:08, while Back to question returns to 16:10. Other events outside an excerpt remain labeled, non-seekable markers. All five modes have continuous footage; CM's memory write is 11 seconds into its 15-second excerpt. A URL such as `index.html?mode=FP#examples` opens a particular mode.
 
-Results at a glance follows the manuscript compiled on 2026-10-26 at 14:28:12 HKT. Table 1 reports SurgStream's AvgM of 42.64% against fine-tuned OneStreamer† at 36.64%, a gain of 6.00 percentage points. The updated comparison also includes fine-tuned Qwen3-VL† (4B): RT/BM/FP/PA/CM/AvgM = 82.04/52.33/21.84/24.37/20.68/40.25. SurgStream has the higher AvgM but does not lead every mode: Qwen3-VL† has the higher PA score.
-
-Figure 4 uses a separate comparison of an earlier unweighted SurgStream checkpoint with zero-shot OneStreamer on two full-length test procedures at 1 fps. Peak context decreases from 11,940 to 6,346 tokens (46.9%), median question-call TTFT by 28.6%, and peak GPU memory by 10.1%. Mean update time is 0.53 s excluding frame I/O, below the 1 s input interval. These measurements must not be presented as the efficiency of the fine-tuned Table 1 pair or a worst-case latency guarantee.
+The benchmark overview lists its five temporal modes and five clinical scenarios without task-by-task guide links. Research resources follow it as section 05. Quantitative comparisons remain available in the linked manuscript.
 
 WAM/DTL flow nodes use 20px text with 26px arrows on desktop and stack vertically on mobile. BibTeX remains expanded with a copy button. Film download links have been removed; native video players use `controlslist="nodownload"` to request that supporting browsers hide the download control.
 
@@ -46,9 +44,9 @@ WAM/DTL flow nodes use 20px text with 26px arrows on desktop and stack verticall
 - `assets/clip-*.mp4`: continuous excerpts of the source recordings; FP keeps the full 72-second interval.
 - `assets/clip-bm-memory.mp4` and `assets/poster-bm-memory.jpg`: VID73's 12:03–12:14 continuous recall excerpt and its actual 12:08 source frame. The website can switch to this footage from the BM timeline and return to the 16:10 question.
 - `assets/demo-data.json`: exact recorded answers, full RT multiple-choice prompt, source timestamps, question-snapshot hash and model-adapter hash. The RT display removes the option letter and adds spaces to the phase name. Displayed triplets replace underscores with spaces; raw outputs remain preserved.
-- `benchmark.html` and `assets/benchmark-guide.json`: definitions, timing windows, scoring rules and reference examples for T1–T14; the five temporal modes and five clinical scenarios; causal input and procedure-level split handling. The guide page works without JavaScript. Its examples are label-derived targets from CholecT50 VID06, distinct from the selected recorded model outputs. Source code and question-snapshot hashes identify the audited definitions.
+- `benchmark.html`: a compatibility redirect to the homepage benchmark overview. The previous detailed guide is no longer linked or displayed. Existing reference metadata is retained for source verification.
 - `assets/clip-cm.mp4` and `assets/poster-cm.jpg`: a continuous 15-second source excerpt, 16:43–16:58, and its actual source poster. The recorded Summary is written at 16:54.
-- `assets/surgstream-manuscript.pdf`: the research manuscript PDF downloaded directly after a fresh Overleaf compilation on 2026-10-26 at 14:28:12 HKT; 5 pages, 2,015,033 bytes, SHA256 `e91f42a7c8f6d3aa1511e3f9a7bf5cc0f74cc489be23e2ce43066e1971cd642f`.
+- `assets/surgstream-manuscript.pdf`: the research manuscript PDF downloaded directly after a fresh Overleaf compilation on 2026-10-26 at 21:36:57 HKT; 5 pages, 2,014,670 bytes, SHA256 `6cc75e96c3ced0cc6f5d38bebd74a58d1d58df36f1f79feb14ed7b4a24e80c25`. The first four pages contain the technical paper, followed by ethics, acknowledgements and references on page 5.
 - `assets/method-wam.svg` and `assets/method-dtl.svg`: vector crops of the manuscript's original framework artwork, displayed as clickable previews with an on-page dialog and Zoom control.
 - `assets/surgstream-logo.png`, `surgstream-wordmark.png` and `surgstream-icon.png`: unchanged artwork exported from the manuscript's `SurgStream_Logo.pdf`, with surrounding whitespace cropped. The owl and original burgundy-to-black wordmark are used throughout the page and film. Main colors follow the paper's `#B8324F`, `#1A1A1A` and warm ivory; WAM/DTL retain their respective method colors.
 - `assets/surgstream-logo-transparent.png`, `surgstream-icon-transparent.png` and `favicon-transparent.png`: transparent navigation exports from the same original vector artwork, with only its two page-sized white background paths omitted. Internal white details remain opaque. The browser favicon and navigation wordmark use these assets.
@@ -57,7 +55,7 @@ These are selected research demonstrations. They do not estimate aggregate perfo
 
 The CM phase summary is a recorded model-generated memory write, displayed when the source video reaches 16:54.
 
-The formal benchmark retains categorical multiple-choice questions for T1, T6, T10 and T11. Promotional displays show answer content without choice letters. The guide's split counts are manuscript-reported, not a new dataset recount.
+The formal benchmark retains categorical multiple-choice questions where applicable. Promotional displays show answer content without choice letters. Split counts are manuscript-reported, not a new dataset recount.
 
 ## Credits and media rights
 

@@ -396,7 +396,7 @@ p { color: var(--muted); }
 .dataset-links { display: flex; flex-wrap: wrap; gap: 18px 34px; margin-top: 30px; font-size: 16px; color: #f1ccd5; }
 .dataset-links a { display: inline-flex; align-items: center; gap: 16px; min-height: 44px; }
 .dataset-links a:hover { color: white; }
-.benchmark-numbers { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 24px; padding-bottom: 32px; border-bottom: 1px solid #5b3b48; }
+.benchmark-numbers { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 24px; padding-bottom: 32px; border-bottom: 1px solid #5b3b48; }
 .benchmark-numbers > div, .benchmark-numbers > a { display: flex; flex-direction: column; min-width: 0; }
 .benchmark-numbers > a:hover strong { color: white; }
 .benchmark-numbers > a:focus-visible { outline-color: var(--accent); }
