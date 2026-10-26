@@ -9,7 +9,7 @@
   <title>SurgStream-Bench · 14 Tasks, Five Temporal Modes</title>
   <link rel="canonical" href="https://surgstream.github.io/benchmark.html">
   <link rel="icon" type="image/png" href="assets/favicon-transparent.png">
-  <link rel="stylesheet" href="styles.css?v=f4ecd943dd67">
+  <link rel="stylesheet" href="styles.css?v=5e35d9663fc8">
   <script defer src="media-guard.js?v=0f0ef3bf8658"></script>
 </head>
 <body class="benchmark-page">
@@ -23,7 +23,7 @@
     <section id="benchmark-guide" class="benchmark-guide section-space" aria-labelledby="guide-title">
       <div class="shell">
         <div class="section-kicker"><span>SurgStream-Bench / Field guide</span><span class="kicker-end">Five temporal modes · fourteen tasks</span></div>
-        <div class="guide-heading"><div><h1 id="guide-title" class="guide-page-title">SurgStream-Bench<br><em>task by task.</em></h1><p>A guide to the 14 tasks, five temporal modes and five clinical scenarios in the benchmark.</p></div><a class="button button-light" href="assets/benchmark-guide.json" download>Download the guide <span aria-hidden="true">↓</span></a></div>
+        <div class="guide-heading"><div><h1 id="guide-title" class="guide-page-title">SurgStream-Bench<br><em>task by task.</em></h1><p>A guide to the 14 tasks, five temporal modes and five clinical scenarios in the benchmark.</p></div><a class="button button-light" href="assets/benchmark-guide.json?v=a3d3faf38db3" download>Download the guide <span aria-hidden="true">↓</span></a></div>
 
         <nav class="guide-contents" aria-label="Guide contents"><a href="#mode-comparison">Five modes</a><a href="#benchmark-tasks">All tasks</a><a href="#scenario-mapping-title">Clinical scenarios</a><a href="#evaluation-guide-title">Evaluation</a></nav>
         <nav class="guide-mode-jumps" aria-label="Jump to tasks by temporal mode"><a href="#mode-RT" style="--mode-color:#2B7FB0;--mode-ink:#1D618C;--mode-wash:#EDF5FA"><span class="guide-mode-badge" style="--mode-color:#2B7FB0;--mode-ink:#1D618C;--mode-wash:#EDF5FA">RT</span><span>Real-time perception</span><small>3</small></a><a href="#mode-BM" style="--mode-color:#7030A0;--mode-ink:#7030A0;--mode-wash:#F5EFFA"><span class="guide-mode-badge" style="--mode-color:#7030A0;--mode-ink:#7030A0;--mode-wash:#F5EFFA">BM</span><span>Backward memory</span><small>5</small></a><a href="#mode-FP" style="--mode-color:#C55A11;--mode-ink:#99430D;--mode-wash:#FCF0E7"><span class="guide-mode-badge" style="--mode-color:#C55A11;--mode-ink:#99430D;--mode-wash:#FCF0E7">FP</span><span>Forward proactive QA</span><small>2</small></a><a href="#mode-PA" style="--mode-color:#BF9000;--mode-ink:#7C5D00;--mode-wash:#FCF5DF"><span class="guide-mode-badge" style="--mode-color:#BF9000;--mode-ink:#7C5D00;--mode-wash:#FCF5DF">PA</span><span>Proactive alert</span><small>2</small></a><a href="#mode-CM" style="--mode-color:#548235;--mode-ink:#3F6528;--mode-wash:#F0F5E9"><span class="guide-mode-badge" style="--mode-color:#548235;--mode-ink:#3F6528;--mode-wash:#F0F5E9">CM</span><span>Caption memory</span><small>2</small></a></nav>
@@ -36,7 +36,7 @@
 
         <section id="mode-comparison" class="mode-comparison-section" aria-labelledby="mode-comparison-title">
           <div class="guide-subheading"><div><span class="guide-label">When the interaction happens</span><h3 id="mode-comparison-title">Five temporal modes</h3></div><p>A mode describes the relationship between a request, the supporting evidence and the moment of response.</p></div>
-          <div class="mode-comparison"><table role="table"><caption class="sr-only">Compare the interaction triggers and response timing of the five temporal modes.</caption><thead role="rowgroup"><tr role="row"><th scope="col" role="columnheader">Mode &amp; tasks</th><th scope="col" role="columnheader">Interaction trigger</th><th scope="col" role="columnheader">Response timing</th></tr></thead><tbody role="rowgroup">
+          <div class="mode-comparison"><table role="table"><caption class="sr-only">Compare the interaction triggers and response timing of the five temporal modes.</caption><thead role="rowgroup"><tr role="row"><th scope="col" role="columnheader">Mode and tasks</th><th scope="col" role="columnheader">Interaction trigger</th><th scope="col" role="columnheader">Response timing</th></tr></thead><tbody role="rowgroup">
               <tr role="row"><th scope="row" role="rowheader"><a href="#mode-RT" class="comparison-mode"><span class="guide-mode-badge" style="--mode-color:#2B7FB0;--mode-ink:#1D618C;--mode-wash:#EDF5FA">RT</span><span><strong>Real-time perception</strong><small>3 tasks · T1, T6, T10</small></span></a></th><td role="cell"><span class="comparison-mobile-label" aria-hidden="true">Interaction trigger</span>A question about the current frame or recent scene.</td><td role="cell"><span class="comparison-mobile-label" aria-hidden="true">Response timing</span>Reply at the query; a three-second emission allowance is used in evaluation.</td></tr>
               <tr role="row"><th scope="row" role="rowheader"><a href="#mode-BM" class="comparison-mode"><span class="guide-mode-badge" style="--mode-color:#7030A0;--mode-ink:#7030A0;--mode-wash:#F5EFFA">BM</span><span><strong>Backward memory</strong><small>5 tasks · T4, T7, T8, T11, T12</small></span></a></th><td role="cell"><span class="comparison-mobile-label" aria-hidden="true">Interaction trigger</span>A retrospective question during surgery.</td><td role="cell"><span class="comparison-mobile-label" aria-hidden="true">Response timing</span>Reply when asked, rather than when the historical event originally occurred.</td></tr>
               <tr role="row"><th scope="row" role="rowheader"><a href="#mode-FP" class="comparison-mode"><span class="guide-mode-badge" style="--mode-color:#C55A11;--mode-ink:#99430D;--mode-wash:#FCF0E7">FP</span><span><strong>Forward proactive QA</strong><small>2 tasks · T5, T9</small></span></a></th><td role="cell"><span class="comparison-mobile-label" aria-hidden="true">Interaction trigger</span>An earlier request to watch for a named phase or action.</td><td role="cell"><span class="comparison-mobile-label" aria-hidden="true">Response timing</span>The first reply attributed to the pending request must fall within [a, d], normally event onset through ten seconds later.</td></tr>
@@ -56,18 +56,18 @@
             <h4 id="task-title-T1">Current phase recognition</h4>
             <p class="task-purpose">Identify which stage of the surgical workflow is being performed now.</p>
             <details class="task-details" open>
-              <summary>Evidence, timing &amp; example<span class="details-symbol" aria-hidden="true"></span></summary>
+              <summary>Evidence, timing and example<span class="details-symbol" aria-hidden="true"></span></summary>
               <div class="task-details-body"><dl class="task-spec"><div><dt>Available evidence</dt><dd>The current scene and its annotated phase.</dd></div><div><dt>Answer format</dt><dd>A canonical phase category; evaluated as a categorical choice.</dd></div><div><dt>Valid response time</dt><dd>Target the query instant; evaluation accepts the reply within three seconds.</dd></div><div><dt>Scoring rule</dt><dd>Accuracy: the selected phase must match the reference phase.</dd></div></dl>
                 <div class="reference-example"><div class="reference-label">Label-derived reference · T1</div><p class="reference-context">VID06, question at 00:57.</p><dl><div><dt>Example request</dt><dd>Which surgical phase is being performed now?</dd></div><div><dt>Reference target</dt><dd class="reference-target">Calot triangle dissection.</dd></div></dl></div>
               </div>
             </details>
           </article>
           <article id="task-T6" class="task-card" style="--mode-color:#2B7FB0;--mode-ink:#1D618C;--mode-wash:#EDF5FA" aria-labelledby="task-title-T6">
-            <div class="task-card-meta"><span class="task-id">T6</span><span>S2 · Instrument &amp; action</span></div>
+            <div class="task-card-meta"><span class="task-id">T6</span><span>S2 · Instrument and action</span></div>
             <h4 id="task-title-T6">Instrument and interaction recognition</h4>
             <p class="task-purpose">Identify visible instruments or their current instrument-action-target interactions.</p>
             <details class="task-details">
-              <summary>Evidence, timing &amp; example<span class="details-symbol" aria-hidden="true"></span></summary>
+              <summary>Evidence, timing and example<span class="details-symbol" aria-hidden="true"></span></summary>
               <div class="task-details-body"><dl class="task-spec"><div><dt>Available evidence</dt><dd>Current tool visibility and, when available, triplet annotations. Instrument-only and triplet questions are two variants of this one task.</dd></div><div><dt>Answer format</dt><dd>A categorical instrument set or a set of instrument-action-target triplets.</dd></div><div><dt>Valid response time</dt><dd>Target the current scene and reply within three seconds of the question.</dd></div><div><dt>Scoring rule</dt><dd>Accuracy of the categorical choice representing the current set.</dd></div></dl>
                 <div class="reference-example"><div class="reference-label">Label-derived reference · T6</div><p class="reference-context">VID06, question at 02:17. An instrument-only variant at 01:07 has the reference content 'grasper, hook'.</p><dl><div><dt>Example request</dt><dd>Which instrument-action-target triplets are visible now?</dd></div><div><dt>Reference target</dt><dd class="reference-target">grasper | retract | gallbladder</dd></div></dl></div>
               </div>
@@ -78,7 +78,7 @@
             <h4 id="task-title-T10">Current anatomical target</h4>
             <p class="task-purpose">Identify which anatomical structure is currently being acted on.</p>
             <details class="task-details">
-              <summary>Evidence, timing &amp; example<span class="details-symbol" aria-hidden="true"></span></summary>
+              <summary>Evidence, timing and example<span class="details-symbol" aria-hidden="true"></span></summary>
               <div class="task-details-body"><dl class="task-spec"><div><dt>Available evidence</dt><dd>The target component of the current instrument-action-target annotations.</dd></div><div><dt>Answer format</dt><dd>A categorical anatomical target or target set.</dd></div><div><dt>Valid response time</dt><dd>Reply within three seconds of the current-scene question.</dd></div><div><dt>Scoring rule</dt><dd>Accuracy of the selected anatomical target.</dd></div></dl>
                 <div class="reference-example"><div class="reference-label">Label-derived reference · T10</div><p class="reference-context">VID06, question at 01:37.</p><dl><div><dt>Example request</dt><dd>Which anatomical structure is being acted on now?</dd></div><div><dt>Reference target</dt><dd class="reference-target">Gallbladder.</dd></div></dl></div>
               </div>
@@ -97,29 +97,29 @@
             <h4 id="task-title-T4">Completed-phase duration</h4>
             <p class="task-purpose">Recall how long an earlier, completed phase lasted.</p>
             <details class="task-details">
-              <summary>Evidence, timing &amp; example<span class="details-symbol" aria-hidden="true"></span></summary>
+              <summary>Evidence, timing and example<span class="details-symbol" aria-hidden="true"></span></summary>
               <div class="task-details-body"><dl class="task-spec"><div><dt>Available evidence</dt><dd>A completed phase interval. The query is delayed until the confirming evidence has left the configured recent visual window.</dd></div><div><dt>Answer format</dt><dd>A numeric duration in seconds.</dd></div><div><dt>Valid response time</dt><dd>Answer the retrospective question within three seconds.</dd></div><div><dt>Scoring rule</dt><dd>Duration accuracy with a 20% relative-error tolerance.</dd></div></dl>
                 <div class="reference-example"><div class="reference-label">Label-derived reference · T4</div><p class="reference-context">VID06, Preparation spans 00:00-00:55; question at 01:42.</p><dl><div><dt>Example request</dt><dd>How long did the Preparation phase last?</dd></div><div><dt>Reference target</dt><dd class="reference-target">55 seconds.</dd></div></dl></div>
               </div>
             </details>
           </article>
           <article id="task-T7" class="task-card" style="--mode-color:#7030A0;--mode-ink:#7030A0;--mode-wash:#F5EFFA" aria-labelledby="task-title-T7">
-            <div class="task-card-meta"><span class="task-id">T7</span><span>S2 · Instrument &amp; action</span></div>
+            <div class="task-card-meta"><span class="task-id">T7</span><span>S2 · Instrument and action</span></div>
             <h4 id="task-title-T7">First instrument appearance</h4>
             <p class="task-purpose">Recover when a named instrument first became visible earlier in the procedure.</p>
             <details class="task-details">
-              <summary>Evidence, timing &amp; example<span class="details-symbol" aria-hidden="true"></span></summary>
+              <summary>Evidence, timing and example<span class="details-symbol" aria-hidden="true"></span></summary>
               <div class="task-details-body"><dl class="task-spec"><div><dt>Available evidence</dt><dd>The first stable tool appearance. Independent visibility labels are used where available, including visible tools without an active triplet.</dd></div><div><dt>Answer format</dt><dd>A source-video timestamp in mm:ss.</dd></div><div><dt>Valid response time</dt><dd>The first appearance has left the recent visual window before the question; reply within three seconds of the query.</dd></div><div><dt>Scoring rule</dt><dd>Timestamp recall with an absolute tolerance of ten seconds.</dd></div></dl>
                 <div class="reference-example"><div class="reference-label">Label-derived reference · T7</div><p class="reference-context">VID06, first appearance at 00:15; question at 02:24.</p><dl><div><dt>Example request</dt><dd>When did the grasper first appear?</dd></div><div><dt>Reference target</dt><dd class="reference-target">00:15</dd></div></dl></div>
               </div>
             </details>
           </article>
           <article id="task-T8" class="task-card" style="--mode-color:#7030A0;--mode-ink:#7030A0;--mode-wash:#F5EFFA" aria-labelledby="task-title-T8">
-            <div class="task-card-meta"><span class="task-id">T8</span><span>S2 · Instrument &amp; action</span></div>
+            <div class="task-card-meta"><span class="task-id">T8</span><span>S2 · Instrument and action</span></div>
             <h4 id="task-title-T8">Clipping event count</h4>
             <p class="task-purpose">Accumulate how many annotated clipping events have occurred so far.</p>
             <details class="task-details">
-              <summary>Evidence, timing &amp; example<span class="details-symbol" aria-hidden="true"></span></summary>
+              <summary>Evidence, timing and example<span class="details-symbol" aria-hidden="true"></span></summary>
               <div class="task-details-body"><dl class="task-spec"><div><dt>Available evidence</dt><dd>Past clipping onsets, using action labels or the available clipper tool-onset annotations. The construction delays the question so the relevant counting evidence is outside the recent visual window.</dd></div><div><dt>Answer format</dt><dd>An integer event count.</dd></div><div><dt>Valid response time</dt><dd>Answer the count question within three seconds.</dd></div><div><dt>Scoring rule</dt><dd>Count accuracy with a tolerance of plus or minus one event.</dd></div></dl>
                 <div class="reference-example"><div class="reference-label">Label-derived reference · T8</div><p class="reference-context">VID06, question at 22:15; reference count three.</p><dl><div><dt>Example request</dt><dd>How many clipping actions have been done so far?</dd></div><div><dt>Reference target</dt><dd class="reference-target">3</dd></div></dl></div>
               </div>
@@ -130,7 +130,7 @@
             <h4 id="task-title-T11">Anatomical handling order</h4>
             <p class="task-purpose">Recall which of two structures was first handled or clipped.</p>
             <details class="task-details">
-              <summary>Evidence, timing &amp; example<span class="details-symbol" aria-hidden="true"></span></summary>
+              <summary>Evidence, timing and example<span class="details-symbol" aria-hidden="true"></span></summary>
               <div class="task-details-body"><dl class="task-spec"><div><dt>Available evidence</dt><dd>The first annotated handling or clipping onset for each structure. Onsets must be at least ten seconds apart; the relevant confirmations precede the recent visual window.</dd></div><div><dt>Answer format</dt><dd>One of the two named anatomical structures.</dd></div><div><dt>Valid response time</dt><dd>Answer the retrospective order question within three seconds.</dd></div><div><dt>Scoring rule</dt><dd>Accuracy of the two-choice order decision.</dd></div></dl>
                 <div class="reference-example"><div class="reference-label">Label-derived reference · T11</div><p class="reference-context">VID06, question at 23:35; first clipping onsets 20:36 for the duct and 21:19 for the artery.</p><dl><div><dt>Example request</dt><dd>Which was clipped first: the cystic artery or the cystic duct?</dd></div><div><dt>Reference target</dt><dd class="reference-target">Cystic duct.</dd></div></dl></div>
               </div>
@@ -141,7 +141,7 @@
             <h4 id="task-title-T12">Surgical progress summary</h4>
             <p class="task-purpose">Summarize the completed workflow and confirmed events available at an intermediate point.</p>
             <details class="task-details">
-              <summary>Evidence, timing &amp; example<span class="details-symbol" aria-hidden="true"></span></summary>
+              <summary>Evidence, timing and example<span class="details-symbol" aria-hidden="true"></span></summary>
               <div class="task-details-body"><dl class="task-spec"><div><dt>Available evidence</dt><dd>All confirmed completed phases and first-occurrence events before the query. This task can include recently confirmed events as well as long-term history.</dd></div><div><dt>Answer format</dt><dd>Structured phase intervals followed by timestamped first-occurrence events.</dd></div><div><dt>Valid response time</dt><dd>Reply within three seconds of the progress query; include only information confirmed by that point.</dd></div><div><dt>Scoring rule</dt><dd>S-F1 averages phase-interval and event F1. Canonical phase/event names must match; interval boundaries and event timestamps are matched within 30 seconds.</dd></div></dl>
                 <div class="reference-example"><div class="reference-label">Label-derived reference · T12</div><p class="reference-context">VID06, question at 01:14; complete reference answer for this instance.</p><dl><div><dt>Example request</dt><dd>What has been done so far in this surgery?</dd></div><div><dt>Reference target</dt><dd class="reference-target structured-target">P1 Preparation 00:00-00:55
 [00:15] grasper | retract | gallbladder
@@ -162,18 +162,18 @@
             <h4 id="task-title-T5">Requested phase-start notification</h4>
             <p class="task-purpose">Remember a request to announce the start of a specified future phase.</p>
             <details class="task-details">
-              <summary>Evidence, timing &amp; example<span class="details-symbol" aria-hidden="true"></span></summary>
+              <summary>Evidence, timing and example<span class="details-symbol" aria-hidden="true"></span></summary>
               <div class="task-details-body"><dl class="task-spec"><div><dt>Available evidence</dt><dd>A named phase begins after the query. Generated queries normally precede the event by 10-120 seconds.</dd></div><div><dt>Answer format</dt><dd>A start notification containing the requested phase.</dd></div><div><dt>Valid response time</dt><dd>Wait for phase onset b, then reply inside [b, b + 10 s], capped by video length.</dd></div><div><dt>Scoring rule</dt><dd>T-Acc: the first reply attributed to this pending request must have the required start/phase content and fall inside the window. A premature or late reply does not become correct by repeating it later.</dd></div></dl>
                 <div class="reference-example"><div class="reference-label">Label-derived reference · T5</div><p class="reference-context">VID06, query 21:32; phase starts 23:26; valid reply 23:26-23:36.</p><dl><div><dt>Example request</dt><dd>Tell me when the GallbladderDissection phase starts.</dd></div><div><dt>Reference target</dt><dd class="reference-target">The gallbladder dissection phase has started.</dd></div></dl></div>
               </div>
             </details>
           </article>
           <article id="task-T9" class="task-card" style="--mode-color:#C55A11;--mode-ink:#99430D;--mode-wash:#FCF0E7" aria-labelledby="task-title-T9">
-            <div class="task-card-meta"><span class="task-id">T9</span><span>S2 · Instrument &amp; action</span></div>
+            <div class="task-card-meta"><span class="task-id">T9</span><span>S2 · Instrument and action</span></div>
             <h4 id="task-title-T9">Requested action-start notification</h4>
             <p class="task-purpose">Wait for a named instrument to begin a specified action, then notify the user.</p>
             <details class="task-details">
-              <summary>Evidence, timing &amp; example<span class="details-symbol" aria-hidden="true"></span></summary>
+              <summary>Evidence, timing and example<span class="details-symbol" aria-hidden="true"></span></summary>
               <div class="task-details-body"><dl class="task-spec"><div><dt>Available evidence</dt><dd>A future labeled triplet onset. The first onset of each instrument-verb pair is used so the requested event is unambiguous.</dd></div><div><dt>Answer format</dt><dd>An action-start notification naming the instrument and verb; the reference text also names the target.</dd></div><div><dt>Valid response time</dt><dd>Queries normally arrive 10-120 seconds before the event. The valid reply window is [event onset, event onset + 10 s], capped by video length.</dd></div><div><dt>Scoring rule</dt><dd>T-Acc: the first attributed reply must contain the required start, instrument and action content and arrive inside the window.</dd></div></dl>
                 <div class="reference-example"><div class="reference-label">Label-derived reference · T9</div><p class="reference-context">VID06, query 00:04; event 00:15; valid reply 00:15-00:25.</p><dl><div><dt>Example request</dt><dd>Tell me when the grasper starts to retract.</dd></div><div><dt>Reference target</dt><dd class="reference-target">The grasper has started to retract the gallbladder.</dd></div></dl></div>
               </div>
@@ -192,7 +192,7 @@
             <h4 id="task-title-T2">Phase-transition alert</h4>
             <p class="task-purpose">Announce entry into a new phase without waiting for a question.</p>
             <details class="task-details">
-              <summary>Evidence, timing &amp; example<span class="details-symbol" aria-hidden="true"></span></summary>
+              <summary>Evidence, timing and example<span class="details-symbol" aria-hidden="true"></span></summary>
               <div class="task-details-body"><dl class="task-spec"><div><dt>Available evidence</dt><dd>The annotated onset b of the next surgical phase.</dd></div><div><dt>Answer format</dt><dd>A transition alert naming the new phase.</dd></div><div><dt>Valid response time</dt><dd>The valid window is [b, b + 10 s], capped by the last video second.</dd></div><div><dt>Scoring rule</dt><dd>T-F1: alerts and reference events are matched one-to-one. A hit requires the transition type, correct phase content and a time inside the valid window. Unmatched alerts and missed events affect precision and recall.</dd></div></dl>
                 <div class="reference-example"><div class="reference-label">Label-derived reference · T2</div><p class="reference-context">VID06, phase onset 00:55; valid alert 00:55-01:05.</p><dl><div><dt>Example request</dt><dd>No user question: an automatic phase alert.</dd></div><div><dt>Reference target</dt><dd class="reference-target">Phase transition: entering Calot triangle dissection.</dd></div></dl></div>
               </div>
@@ -203,7 +203,7 @@
             <h4 id="task-title-T3">Instrument preparation reminder</h4>
             <p class="task-purpose">Remind the team about preparation for an upcoming phase before that phase begins.</p>
             <details class="task-details">
-              <summary>Evidence, timing &amp; example<span class="details-symbol" aria-hidden="true"></span></summary>
+              <summary>Evidence, timing and example<span class="details-symbol" aria-hidden="true"></span></summary>
               <div class="task-details-body"><dl class="task-spec"><div><dt>Available evidence</dt><dd>Annotated phase onsets define the target window. Preparation text comes from a fixed phase-to-instrument lookup, such as hook for Calot triangle dissection.</dd></div><div><dt>Answer format</dt><dd>The upcoming phase and its associated preparation reminder.</dd></div><div><dt>Valid response time</dt><dd>The valid window is [max(0, b - 60 s), b]. The phase onset is the deadline.</dd></div><div><dt>Scoring rule</dt><dd>T-F1 with one-to-one matching, an in-window reminder and the required phase/reminder-type content. This task uses the benchmark's fixed preparation rules.</dd></div></dl>
                 <div class="reference-example"><div class="reference-label">Label-derived reference · T3</div><p class="reference-context">VID06, next phase begins at 00:55; valid reminder 00:00-00:55.</p><dl><div><dt>Example request</dt><dd>No user question: preparation is triggered by the workflow.</dd></div><div><dt>Reference target</dt><dd class="reference-target">Calot triangle dissection is coming next; prepare the hook.</dd></div></dl></div>
               </div>
@@ -222,7 +222,7 @@
             <h4 id="task-title-T13">End-of-surgery operative note</h4>
             <p class="task-purpose">Assemble the full operation into a structured record once the stream ends.</p>
             <details class="task-details">
-              <summary>Evidence, timing &amp; example<span class="details-symbol" aria-hidden="true"></span></summary>
+              <summary>Evidence, timing and example<span class="details-symbol" aria-hidden="true"></span></summary>
               <div class="task-details-body"><dl class="task-spec"><div><dt>Available evidence</dt><dd>All phase intervals and first-occurrence instrument or instrument-action-target events from the procedure.</dd></div><div><dt>Answer format</dt><dd>A structured note using phase names, interval boundaries and timestamped events.</dd></div><div><dt>Valid response time</dt><dd>The query arrives on the final video second; evaluation accepts the reply within three seconds.</dd></div><div><dt>Scoring rule</dt><dd>S-F1 using the same phase/event matching rules as T12, with a 30-second tolerance for boundaries and event times.</dd></div></dl>
                 <div class="reference-example"><div class="reference-label">Label-derived reference · T13</div><p class="reference-context">VID06, query at 35:53. Excerpt: the full reference contains seven phase intervals and 26 first-occurrence events.</p><dl><div><dt>Example request</dt><dd>The surgery has ended. Write the operative note.</dd></div><div><dt>Reference target</dt><dd class="reference-target structured-target">P1 Preparation 00:00-00:55
 P2 CalotTriangleDissection 00:55-20:28
@@ -237,7 +237,7 @@ P3 ClippingCutting 20:28-23:26
             <h4 id="task-title-T14">Continuous streaming narration</h4>
             <p class="task-purpose">Write timely observations and phase summaries throughout the stream without being asked.</p>
             <details class="task-details">
-              <summary>Evidence, timing &amp; example<span class="details-symbol" aria-hidden="true"></span></summary>
+              <summary>Evidence, timing and example<span class="details-symbol" aria-hidden="true"></span></summary>
               <div class="task-details-body"><dl class="task-spec"><div><dt>Available evidence</dt><dd>The event and phase timeline across the procedure. Evaluation reads the model's own Observe and Summary records; there is no separate question-answer target for this task.</dd></div><div><dt>Answer format</dt><dd>Timestamped Observe event records (instruments or instrument-action-target triplets) and Summary phase intervals.</dd></div><div><dt>Valid response time</dt><dd>Observe records must be emitted causally within 30 seconds after the corresponding event; their reported timestamps must match within 30 seconds and cannot lie in the future. Phase summaries must follow completion and be emitted within ten seconds; reported interval boundaries must match within 30 seconds.</dd></div><div><dt>Scoring rule</dt><dd>S-F1 averages matched phase intervals and Observe events. Summary event counts are record content and are not a separately scored count-accuracy measure in this task.</dd></div></dl>
                 <div class="reference-example"><div class="reference-label">Label-derived reference · T14</div><p class="reference-context">VID06, two label-derived event examples from the full-video narration target. These are event contents, not a claimed model transcript.</p><dl><div><dt>Example request</dt><dd>No user question: continuous record writing.</dd></div><div><dt>Reference target</dt><dd class="reference-target structured-target">[00:15] grasper | retract | gallbladder
 [00:58] hook | dissect | gallbladder</dd></div></dl></div>
@@ -250,7 +250,7 @@ P3 ClippingCutting 20:28-23:26
       </section>
 
         <section class="guide-scenarios" aria-labelledby="scenario-mapping-title"><div class="guide-subheading"><div><span class="guide-label">What the interaction concerns</span><h3 id="scenario-mapping-title">Five clinical scenarios</h3></div><p>Temporal modes describe <em>when</em> an interaction happens; clinical scenarios describe <em>what</em> it concerns. They are two views of the same fourteen tasks.</p></div><div class="scenario-mapping"><table><caption class="sr-only">Clinical scenarios and their task assignments.</caption><thead><tr><th scope="col">Scenario</th><th scope="col">Clinical focus</th><th scope="col">Tasks</th></tr></thead><tbody><tr><th scope="row"><span>S1</span>Workflow</th><td>Identify, time and anticipate surgical phases.</td><td><a class="task-id-link" href="#task-T1">T1</a><a class="task-id-link" href="#task-T2">T2</a><a class="task-id-link" href="#task-T3">T3</a><a class="task-id-link" href="#task-T4">T4</a><a class="task-id-link" href="#task-T5">T5</a></td></tr>
-<tr><th scope="row"><span>S2</span>Instrument &amp; action</th><td>Recognize tools and interactions, recall first appearances and count events.</td><td><a class="task-id-link" href="#task-T6">T6</a><a class="task-id-link" href="#task-T7">T7</a><a class="task-id-link" href="#task-T8">T8</a><a class="task-id-link" href="#task-T9">T9</a></td></tr>
+<tr><th scope="row"><span>S2</span>Instrument and action</th><td>Recognize tools and interactions, recall first appearances and count events.</td><td><a class="task-id-link" href="#task-T6">T6</a><a class="task-id-link" href="#task-T7">T7</a><a class="task-id-link" href="#task-T8">T8</a><a class="task-id-link" href="#task-T9">T9</a></td></tr>
 <tr><th scope="row"><span>S3</span>Anatomy</th><td>Identify the current target and recover the order of handled structures.</td><td><a class="task-id-link" href="#task-T10">T10</a><a class="task-id-link" href="#task-T11">T11</a></td></tr>
 <tr><th scope="row"><span>S4</span>Documentation</th><td>Organize procedural progress and the completed operation into structured records.</td><td><a class="task-id-link" href="#task-T12">T12</a><a class="task-id-link" href="#task-T13">T13</a></td></tr>
 <tr><th scope="row"><span>S5</span>Narration</th><td>Maintain timely event observations and phase summaries throughout the procedure.</td><td><a class="task-id-link" href="#task-T14">T14</a></td></tr></tbody></table></div></section>
@@ -261,10 +261,10 @@ P3 ClippingCutting 20:28-23:26
           <article><span class="guide-rule-number">03</span><h4>Categories without choice letters</h4><p>The formal benchmark uses multiple-choice questions for T1, T6, T10 and T11. This guide and the promotional film show the answer content without option letters.</p></article>
           <article><span class="guide-rule-number">04</span><h4>Task scores, then two views</h4><p>Each task is scored first. A mode or scenario score averages its member tasks; Avg_M averages the five modes and Avg_S averages the five scenarios. The two views group the same tasks by different criteria.</p></article>
         </div></section>
-        <div class="guide-source-note"><p>T1-T14 and S1-S5 only; the five-scenario benchmark described in the manuscript. Current research manuscript; no independent remote dataset recount is claimed.</p><a class="text-link" href="assets/benchmark-guide.json" download>Guide &amp; source snapshot identifiers <span aria-hidden="true">↓</span></a></div>
+        <div class="guide-source-note"><p>T1-T14 and S1-S5 only; the five-scenario benchmark described in the manuscript. Current research manuscript; no independent remote dataset recount is claimed.</p><a class="text-link" href="assets/benchmark-guide.json?v=a3d3faf38db3" download>Guide and source snapshot identifiers <span aria-hidden="true">↓</span></a></div>
       </div>
     </section>
   </main>
-  <footer class="site-footer shell"><a class="wordmark" href="index.html"><img src="assets/surgstream-logo-transparent.png" alt="SurgStream" width="180" height="61"></a><div><p>Real-time surgical video understanding.</p><small>Structure and presentation inspired by <a href="https://surgsigma.github.io/" target="_blank" rel="noopener">SurgΣ</a>, <a href="https://mcg-nju.github.io/OneStreamer/" target="_blank" rel="noopener">OneStreamer</a> and the <a href="https://github.com/eliahuhorwitz/Academic-project-page-template" target="_blank" rel="noopener">Academic Project Page Template</a>. Original implementation.</small></div><a class="back-top" href="#main">Back to top <span aria-hidden="true">↑</span></a></footer>
+  <footer class="site-footer shell"><a class="wordmark" href="index.html"><img src="assets/surgstream-logo-transparent.png" alt="SurgStream" width="180" height="61"></a><div><p>Real-time surgical video understanding.</p><small><a href="https://github.com/eliahuhorwitz/Academic-project-page-template" target="_blank" rel="noopener">Academic Project Page Template</a>.</small></div><a class="back-top" href="#main">Back to top <span aria-hidden="true">↑</span></a></footer>
 </body>
 </html>

@@ -46,7 +46,14 @@
       "clip": "assets/clip-bm.mp4",
       "poster": "assets/poster-bm.jpg",
       "source": "CholecT50 · VID73",
-      "caption": "Continuous source footage, 16:05–16:20. The question at 16:10 recalls the clipper first appearing at 12:08; that earlier memory record was written at 12:10.",
+      "caption": "Continuous source footage, 16:05–16:20. The question at 16:10 recalls the annotated clipper appearance at 12:08. Select Earlier memory to replay the corresponding footage.",
+      "memory_clip": {
+        "start": 723,
+        "end": 734,
+        "clip": "assets/clip-bm-memory.mp4",
+        "poster": "assets/poster-bm-memory.jpg",
+        "caption": "Earlier footage, 12:03–12:14. The recorded answer and benchmark reference are 12:08."
+      },
       "records": [
         {
           "time": 728,
@@ -129,7 +136,7 @@
       "clip": "assets/clip-cm.mp4",
       "poster": "assets/poster-cm.jpg",
       "source": "Cholec80 · video77",
-      "caption": "Continuous source footage, 16:43–16:58; memory write at 16:54. This is a model-generated summary: its 14:17–16:52 interval approximates the annotated 14:29–16:48 phase. Event counts have not been independently verified.",
+      "caption": "Continuous source footage, 16:43–16:58; memory write at 16:54. This is a model-generated summary: its 14:17–16:52 interval approximates the annotated 14:29–16:48 phase.",
       "records": [],
       "ground_truth_phase": {
         "name": "ClippingCutting",
@@ -140,7 +147,7 @@
       "record_kind": "recorded_model_output"
     }
   ],
-  "sourceNote": "Selected recorded research outputs, not an accuracy estimate. Each website video excerpt is continuous; timestamps refer to the original recordings. The main film shows the FP request as pending from an earlier time. CM summaries are model-generated; event counts have not been independently verified.",
+  "sourceNote": "Selected recorded research outputs, not an accuracy estimate. Each website video excerpt is continuous; timestamps refer to the original recordings. The main film shows the FP request as pending from an earlier time. CM summaries are model-generated.",
   "provenance": {
     "run": "q1_full",
     "question_snapshot_sha256": "9989bb8029546f9c4841012c1e5ce4f98c334367090ae86d204daf698b25d214",

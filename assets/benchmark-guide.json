@@ -14,7 +14,7 @@
   },
   "scenarios": [
     {"id": "S1", "name": "Workflow", "description": "Identify, time and anticipate surgical phases.", "task_ids": ["T1", "T2", "T3", "T4", "T5"]},
-    {"id": "S2", "name": "Instrument & action", "description": "Recognize tools and interactions, recall first appearances and count events.", "task_ids": ["T6", "T7", "T8", "T9"]},
+    {"id": "S2", "name": "Instrument and action", "description": "Recognize tools and interactions, recall first appearances and count events.", "task_ids": ["T6", "T7", "T8", "T9"]},
     {"id": "S3", "name": "Anatomy", "description": "Identify the current target and recover the order of handled structures.", "task_ids": ["T10", "T11"]},
     {"id": "S4", "name": "Documentation", "description": "Organize procedural progress and the completed operation into structured records.", "task_ids": ["T12", "T13"]},
     {"id": "S5", "name": "Narration", "description": "Maintain timely event observations and phase summaries as surgery unfolds.", "task_ids": ["T14"]}

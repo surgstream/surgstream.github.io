@@ -24,20 +24,21 @@ Backward memory: recall an earlier event.
 6
 00:00:30.000 --> 00:00:34.800
 Earlier Observe record [12:08]:
-clipper | clip | cystic_artery.
+clipper | clip | cystic artery.
 
 7
 00:00:35.000 --> 00:00:40.000
-Question: When did the clipper first appear?
+Question at 16:10: When did the clipper first appear?
 Recorded response: 12:08.
 
 8
 00:00:40.100 --> 00:00:44.800
-The earlier record remains available for the later question.
+Earlier-memory replay: 12:03–12:14.
+Its source clock is separate from the current stream.
 
 9
 00:00:45.000 --> 00:00:47.700
-The last frame is held for reading.
+The final source frames are held for reading.
 
 10
 00:00:48.000 --> 00:00:50.900
@@ -87,8 +88,8 @@ The annotated clipping-and-cutting phase ends at 16:48.
 
 20
 00:01:34.400 --> 00:01:39.800
-This is a model-generated Summary.
-Its event counts have not been independently verified.
+The model writes a compact Summary
+after the phase completes.
 
 21
 00:01:40.000 --> 00:01:48.700

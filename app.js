@@ -14,7 +14,8 @@
   const mediaVersions = new Map([
     ['assets/clip-rt.mp4', '5952579a7428'],
     ['assets/clip-bm.mp4', '0bc3e94c1af4'],
-    ['assets/poster-bm.jpg', 'aa5d72fc8430']
+    ['assets/poster-bm.jpg', 'aa5d72fc8430'],
+    ['assets/clip-bm-memory.mp4', '360afccb71d3']
   ]);
   const mediaURL = path => mediaVersions.has(path) ? path + '?v=' + mediaVersions.get(path) : path;
   const tabs = [...document.querySelectorAll('[role="tab"][data-mode]')];
@@ -26,9 +27,19 @@
   const replayButton = document.getElementById('replay-example');
   const jumpButton = document.getElementById('jump-response');
   const taskLink = document.getElementById('example-task-link');
+  const transcript = document.querySelector('.transcript');
+  const queryMessage = transcript?.querySelector('.query-message');
+  const answerMessage = transcript?.querySelector('.answer-message');
+  const clockLabel = document.querySelector('.source-clock > span');
+  const memoryReturnButton = document.createElement('button');
+  memoryReturnButton.type = 'button';
+  memoryReturnButton.id = 'return-to-question';
+  memoryReturnButton.hidden = true;
+  document.querySelector('.replay-toolbar')?.append(memoryReturnButton);
   const reducedMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)');
   let activeMode = 'RT';
   let activeExample = null;
+  let activeMedia = null;
   let timelineEvents = [];
   let pendingSeek = null;
   let playbackGeneration = 0;
@@ -83,6 +94,7 @@
         meta.append(time);
       }
       const emitted = structured ? timeInSeconds(record.emitted_at) : null;
+      if (emitted != null || sourceTime != null) row.dataset.availableAt = String(emitted ?? sourceTime);
       if (emitted != null && emitted !== sourceTime) {
         const written = document.createElement('span');
         written.className = 'record-emitted';
@@ -91,7 +103,8 @@
       }
       const text = document.createElement('p');
       text.className = 'record-text';
-      text.textContent = structured ? record.text || record.content || record.answer || '' : String(record ?? '');
+      const content = structured ? record.text || record.content || record.answer || '' : String(record ?? '');
+      text.textContent = content.replaceAll('_', ' ');
       row.append(meta, text);
       container.append(row);
     });
@@ -118,15 +131,17 @@
     }
   }
 
-  function excerptRange(example = activeExample) {
+  function excerptRange(example = activeMedia || activeExample) {
     const start = timeInSeconds(example?.start) ?? 0;
     return { start, end: timeInSeconds(example?.end) ?? start };
   }
 
   function canSeekTo(sourceTime) {
     if (!activeExample?.clip || sourceTime == null) return false;
-    const { start, end } = excerptRange();
-    return sourceTime >= start && sourceTime <= end;
+    return [activeExample, activeExample.memory_clip].filter(Boolean).some(media => {
+      const { start, end } = excerptRange(media);
+      return media.clip && sourceTime >= start && sourceTime <= end;
+    });
   }
 
   function renderTimeline(example) {
@@ -155,13 +170,16 @@
       row.dataset.event = event.kind;
       const seekable = canSeekTo(event.time);
       row.classList.toggle('is-outside', Boolean(example.clip) && !seekable);
+      row.classList.toggle('is-memory-replay', event.kind === 'memory' && seekable);
       const marker = document.createElement(seekable ? 'button' : 'span');
       marker.className = seekable ? 'timeline-seek' : 'timeline-marker';
       if (seekable) {
         marker.type = 'button';
         const action = event.kind === 'query' ? 'question' : event.kind === 'response' ? 'response' : event.kind;
-        marker.setAttribute('aria-label', 'Seek to ' + action + ' at ' + formatTime(event.time));
-        marker.addEventListener('click', () => seekToSource(event.time));
+        marker.setAttribute('aria-label', event.kind === 'memory'
+          ? 'Replay earlier memory at ' + formatTime(event.time)
+          : 'Seek to ' + action + ' at ' + formatTime(event.time));
+        marker.addEventListener('click', () => seekToSource(event.time, event.kind === 'memory'));
       }
       const label = document.createElement('strong');
       label.className = 'timeline-label';
@@ -185,6 +203,9 @@
 
   function replayState(sourceTime) {
     if (!activeExample) return 'No recorded example is available.';
+    if (activeMedia === activeExample.memory_clip) {
+      return 'Earlier footage · Replaying the event recalled by the question at ' + formatTime(activeExample.query_time) + '.';
+    }
     const response = timeInSeconds(activeExample.response_time);
     if (!activeExample.clip) return 'Still frame · Model-generated memory write at ' + formatTime(response) + '.';
     if (video?.ended || sourceTime >= excerptRange().end) {
@@ -223,8 +244,10 @@
 
   function updateReplay() {
     const { start } = excerptRange();
-    const offset = activeExample?.clip && Number.isFinite(video?.currentTime) ? video.currentTime : 0;
+    const offset = pendingSeek?.generation === playbackGeneration ? pendingSeek.offset
+      : activeMedia?.clip && Number.isFinite(video?.currentTime) ? video.currentTime : 0;
     const sourceTime = start + offset;
+    const recalling = Boolean(activeExample?.memory_clip && activeMedia === activeExample.memory_clip);
     if (clock) {
       clock.textContent = activeExample ? formatTime(sourceTime) + (activeExample.clip ? '' : ' · Still frame') : '—';
       if (activeExample) clock.dateTime = 'PT' + Math.floor(sourceTime) + 'S';
@@ -241,7 +264,38 @@
       if (state === 'current') event.node.setAttribute('aria-current', 'step');
       else event.node.removeAttribute('aria-current');
     });
+    if (activeExample) {
+      const response = timeInSeconds(activeExample.response_time);
+      const emitted = recalling || !activeMedia?.clip || response == null || sourceTime >= response;
+      const waiting = activeMode === 'CM' ? 'Waiting for the phase summary…'
+        : activeMode === 'PA' ? 'Waiting for the automatic alert…' : 'Waiting for the recorded response…';
+      setText('example-answer', emitted ? (activeExample.display_answer || activeExample.answer || 'No recorded response in the selected window.').replaceAll('_', ' ') : waiting);
+      setText('answer-time', emitted ? formatTime(response) : '');
+      answerMessage?.classList.toggle('is-pending', !emitted);
+      if (answerMessage) answerMessage.dataset.outputState = emitted ? 'emitted' : 'pending';
+    }
+    const records = document.getElementById('example-records');
+    if (records) {
+      const rows = [...records.querySelectorAll('.record-entry')];
+      rows.forEach(row => {
+        const availableAt = timeInSeconds(row.dataset.availableAt);
+        row.hidden = !recalling && availableAt != null && sourceTime < availableAt;
+      });
+      records.hidden = rows.every(row => row.hidden);
+    }
     setText('replay-status', playbackNotice || replayState(sourceTime));
+  }
+
+  function showMediaDetails() {
+    const recalling = Boolean(activeExample?.memory_clip && activeMedia === activeExample.memory_clip);
+    if (panel) panel.dataset.recall = String(recalling);
+    if (clockLabel) clockLabel.textContent = recalling ? 'Earlier memory · source time' : 'Source-video time';
+    memoryReturnButton.hidden = !recalling;
+    memoryReturnButton.textContent = 'Back to question · ' + formatTime(activeExample?.query_time);
+    setText('example-source', (activeExample?.source || 'Recorded surgical footage') + (recalling ? ' · Earlier memory replay' : ''));
+    const { start, end } = excerptRange();
+    setText('example-range', start === end ? formatTime(start) : formatTime(start) + ' — ' + formatTime(end));
+    setText('example-caption', activeMedia?.caption || activeExample?.caption || 'Source timestamps refer to the original surgical recording.');
   }
 
   function applyPendingSeek() {
@@ -276,7 +330,21 @@
     if (!video || !canSeekTo(sourceTime)) return;
     video.pause();
     playbackNotice = '';
+    const media = [activeExample, activeExample.memory_clip].filter(Boolean).find(candidate => {
+      const { start, end } = excerptRange(candidate);
+      return sourceTime >= start && sourceTime <= end;
+    });
+    const changed = media !== activeMedia;
+    if (changed) {
+      activeMedia = media;
+      playbackGeneration += 1;
+      video.src = mediaURL(media.clip);
+      if (media.poster) video.poster = mediaURL(media.poster);
+      else video.removeAttribute('poster');
+      showMediaDetails();
+    }
     pendingSeek = { offset: sourceTime - excerptRange().start, play, generation: playbackGeneration };
+    if (changed) video.load();
     if (video.readyState < 1) playbackNotice = 'Loading recorded footage; the transcript remains available.';
     applyPendingSeek();
     updateReplay();
@@ -288,6 +356,7 @@
     const example = examples.find(item => String(item.mode).toUpperCase() === mode);
     activeMode = mode;
     activeExample = example || null;
+    activeMedia = activeExample;
     playbackGeneration += 1;
     pendingSeek = null;
     playbackNotice = '';
@@ -299,6 +368,11 @@
       if (active && moveFocus) tab.focus();
     });
     panel?.setAttribute('aria-labelledby', 'tab-' + mode);
+    if (panel) panel.dataset.mode = mode;
+    if (transcript && queryMessage && answerMessage) {
+      if (mode === 'PA' || mode === 'CM') transcript.prepend(answerMessage);
+      else transcript.prepend(queryMessage);
+    }
     setText('example-mode', descriptor.name);
     setText('example-title', example?.title || descriptor.title);
     setText('mode-description', descriptor.description);
@@ -344,10 +418,7 @@
       still.hidden = false;
     }
     video.load();
-    setText('example-source', example.source || 'Recorded surgical footage');
-    const range = example.start === example.end ? formatTime(example.start) : [formatTime(example.start), formatTime(example.end)].filter(Boolean).join(' — ');
-    setText('example-range', range);
-    setText('example-caption', example.caption || 'Edited replay. Source timestamps refer to the original surgical recording.');
+    showMediaDetails();
     const proactiveText = mode === 'CM'
       ? 'No user question. The model writes a phase summary to memory.'
       : mode === 'PA' ? 'No user question. The model issues an automatic phase-transition alert.' : null;
@@ -361,6 +432,7 @@
 
   replayButton?.addEventListener('click', () => seekToSource(excerptRange().start, true));
   jumpButton?.addEventListener('click', () => seekToSource(timeInSeconds(activeExample?.response_time)));
+  memoryReturnButton.addEventListener('click', () => seekToSource(timeInSeconds(activeExample?.query_time)));
   if (video) {
     ['loadedmetadata', 'durationchange', 'canplay'].forEach(event => video.addEventListener(event, applyPendingSeek));
     ['timeupdate', 'seeked', 'play', 'pause', 'ended', 'loadedmetadata'].forEach(event => video.addEventListener(event, updateReplay));
