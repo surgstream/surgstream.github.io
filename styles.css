@@ -196,8 +196,8 @@ p { color: var(--muted); }
 /* Film and project overview */
 .film-frame { overflow: hidden; border: 1px solid #3d2931; border-radius: 11px; background: #1b1518; box-shadow: 0 22px 55px -30px #38232b33; }
 .film-bar { min-height: 62px; display: flex; align-items: center; justify-content: space-between; gap: 20px; padding: 12px 22px; background: white; color: #6a4b58; border-bottom: 1px solid var(--line); font-size: 14px; line-height: 1.6; }
-.film-brand { display: inline-flex; align-items: center; flex-shrink: 0; background: white; }
-.film-brand img { display: block; width: 130px; height: auto; object-fit: contain; }
+.film-brand { display: inline-flex; align-items: center; flex-shrink: 0; }
+
 .film-badge { padding: 3px 9px; border: 1px solid #e2c7d0; border-radius: 4px; color: #80304e; font-size: 14px; white-space: nowrap; }
 .film-frame video { display: block; width: 100%; aspect-ratio: 16/9; object-fit: contain; background: #1b1518; }
 .film-caption { display: flex; justify-content: space-between; align-items: flex-start; gap: 64px; padding-top: 36px; }
@@ -366,8 +366,11 @@ p { color: var(--muted); }
 .answer-message p { color: #4f303e; }
 .answer-message.is-pending { background: var(--mode-tint); border-color: var(--line); }
 .answer-message.is-pending p { color: var(--muted); }
-.answer-brand { background: white; min-height: 30px; }
-.answer-brand img { display: block; width: 124px; height: auto; }
+/* Show the wordmark region of the original transparent logo without a white matte. */
+.film-brand, .answer-brand { position: relative; display: inline-block; overflow: hidden; height: 30px; background: transparent; flex-shrink: 0; }
+.film-brand { width: 130px; }
+.answer-brand { width: 124px; }
+.film-brand img, .answer-brand img { position: absolute; display: block; width: 176.525%; max-width: none; height: auto; left: -75.355%; top: 50%; transform: translateY(-52.755%); }
 .example-records { padding-top: 16px; margin-top: 20px; border-top: 1px dashed var(--line); font-size: 14px; line-height: 1.85; color: #6f4c5d; overflow-wrap: anywhere; }
 .record-entry + .record-entry { margin-top: 7px; }
 .record-meta { display: flex; align-items: center; flex-wrap: wrap; gap: 8px 12px; color: var(--brand-deep); font-size: 14px; }
