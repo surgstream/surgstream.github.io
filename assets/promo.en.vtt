@@ -13,32 +13,33 @@ Five temporal modes: RT, BM, FP, PA and CM.
 Real-time perception: answer the current scene.
 
 4
-00:00:16.000 --> 00:00:26.700
-Question: Which surgical phase is being performed now?
-Recorded response: Calot triangle dissection.
+00:00:16.000 --> 00:00:18.900
+Question at 07:33:
+Which surgical phase is being performed now?
 
 5
+00:00:19.000 --> 00:00:26.700
+Recorded response at 07:33:
+Calot triangle dissection.
+
+6
 00:00:27.000 --> 00:00:29.900
 Backward memory: recall an earlier event.
 
-6
+7
 00:00:30.000 --> 00:00:34.800
-Earlier Observe record [12:08]:
+Stored earlier in memory: Observe [12:08]
 clipper | clip | cystic artery.
 
-7
-00:00:35.000 --> 00:00:40.000
-Question at 16:10: When did the clipper first appear?
-Recorded response: 12:08.
-
 8
-00:00:40.100 --> 00:00:44.800
-Earlier-memory replay: 12:03–12:14.
-Its source clock is separate from the current stream.
+00:00:35.000 --> 00:00:41.300
+Question at 16:10: When did the clipper first appear?
+SurgStream looks back through its memory.
 
 9
-00:00:45.000 --> 00:00:47.700
-The final source frames are held for reading.
+00:00:41.700 --> 00:00:47.800
+The memory replay reaches 12:08.
+Recorded response at 16:10: 12:08.
 
 10
 00:00:48.000 --> 00:00:50.900
@@ -88,12 +89,12 @@ The annotated clipping-and-cutting phase ends at 16:48.
 
 20
 00:01:34.400 --> 00:01:39.800
-The model writes a compact Summary
-after the phase completes.
+The annotated phase has ended.
+The Summary waits until the model confirms the boundary.
 
 21
 00:01:40.000 --> 00:01:48.700
-Summary [P3 ClippingCutting 14:17–16:52]:
+Summary at 16:54 (model-confirmed end 16:52):
 clipper ×2; grasper | retract | gallbladder ×3; scissors ×1.
 
 22
